@@ -1,0 +1,11 @@
+{
+  "name": "id-nav-chatbot",
+  "version": "0.1.0",
+  "private": true,
+  "workspaces": [
+    "apps/*"
+  ],
+  "scripts": {
+    "test": "npm run test -ws --if-present"
+  }
+}
