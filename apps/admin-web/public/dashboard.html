@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>대시보드 - 샛강역 내비 관리자</title>
+  <link rel="stylesheet" href="/admin/css/admin.css">
+</head>
+<body>
+  <nav class="top-nav">
+    <a class="nav-brand" href="/admin/dashboard.html">
+      <svg width="20" height="20" viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5S10.62 6.5 12 6.5s2.5 1.12 2.5 2.5S13.38 11.5 12 11.5z"/></svg>
+      <span>샛강역 내비</span>
+    </a>
+    <div class="nav-links">
+      <a href="/admin/dashboard.html" class="active">대시보드</a>
+      <a href="/admin/anchors.html">앵커 관리</a>
+      <a href="/admin/sessions.html">세션 통계</a>
+    </div>
+    <div class="nav-right">
+      <button onclick="logout()">로그아웃</button>
+    </div>
+  </nav>
+
+  <main class="main-content">
+    <h1 class="page-title">대시보드</h1>
+
+    <!-- KPI 카드 -->
+    <div class="kpi-grid">
+      <div class="kpi-card">
+        <div class="kpi-label">총 세션</div>
+        <div class="kpi-value" id="kpi-total">–</div>
+        <div class="kpi-sub">전체 내비게이션 요청</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">도착 완료</div>
+        <div class="kpi-value" id="kpi-arrived">–</div>
+        <div class="kpi-sub">목적지 도착 확인 세션</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">도착 성공률</div>
+        <div class="kpi-value" id="kpi-success-rate">–</div>
+        <div class="kpi-sub">도착 완료 / 총 세션</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">평균 소요시간</div>
+        <div class="kpi-value" id="kpi-avg-duration">–</div>
+        <div class="kpi-sub">시작 → 도착 평균</div>
+      </div>
+    </div>
+
+    <!-- 앵커 현황 -->
+    <h2 class="section-title">앵커 현황</h2>
+    <div class="anchor-summary-grid">
+      <div class="anchor-stat-card">
+        <div class="stat-number" id="summary-total">–</div>
+        <div class="stat-label">총 앵커</div>
+      </div>
+      <div class="anchor-stat-card">
+        <div class="stat-number" id="summary-b1">–</div>
+        <div class="stat-label">B1층</div>
+      </div>
+      <div class="anchor-stat-card">
+        <div class="stat-number" id="summary-b2">–</div>
+        <div class="stat-label">B2층</div>
+      </div>
+      <div class="anchor-stat-card">
+        <div class="stat-number" id="summary-elevator">–</div>
+        <div class="stat-label">엘리베이터</div>
+      </div>
+    </div>
+
+    <div class="text-right mb-0">
+      <a class="btn btn-secondary btn-sm" href="/admin/anchors.html">앵커 관리 →</a>
+      <a class="btn btn-secondary btn-sm mt-8" href="/admin/sessions.html" style="margin-left:8px;">세션 통계 →</a>
+    </div>
+  </main>
+
+  <script src="/admin/js/admin.js"></script>
+  <script>
+    (async function init() {
+      await checkAuth();
+      setActiveNav();
+      try { await loadStats(); } catch (e) { console.warn('통계 로드 실패', e); }
+      try { await loadAnchors(); } catch (e) { console.warn('앵커 로드 실패', e); }
+    })();
+  </script>
+</body>
+</html>

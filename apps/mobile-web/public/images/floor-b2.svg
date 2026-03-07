@@ -1,0 +1,118 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 800" width="100%" id="floor-b2-svg">
+  <defs>
+    <style>
+      .floor-label  { font: bold 13px sans-serif; fill: #004E89; }
+      .area-label   { font: 11px sans-serif; fill: #333; }
+      .anchor-label { font: 10px sans-serif; fill: #FF6B35; }
+      .anchor-dot   { fill: #FF6B35; stroke: #fff; stroke-width: 2; }
+      .wall         { fill: #dee2e6; stroke: #adb5bd; stroke-width: 2; }
+      .platform     { fill: #c5dff8; stroke: #004E89; stroke-width: 1.5; }
+      .corridor     { fill: #f0f4f8; stroke: #ced4da; stroke-width: 1; }
+      .gate         { fill: #c8dff5; stroke: #004E89; stroke-width: 1.5; }
+      .elevator     { fill: #e8f4fd; stroke: #004E89; stroke-width: 2; }
+      .transfer-up  { fill: #d4edda; stroke: #28a745; stroke-width: 1.5; }
+    </style>
+    <marker id="b2-arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#FF6B35"/>
+    </marker>
+    <marker id="b2-arrow-blue" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#4A90D9"/>
+    </marker>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1000" height="800" fill="#f8f9fa"/>
+
+  <!-- Floor title -->
+  <text x="500" y="35" text-anchor="middle" font-size="18" font-weight="bold" fill="#004E89">샛강역 B2 평면도 (신림선)</text>
+
+  <!-- ─── 외벽 ─── -->
+  <rect x="50" y="60" width="900" height="680" rx="8" class="wall"/>
+
+  <!-- ─── 중앙 통로 ─── -->
+  <rect x="330" y="120" width="340" height="600" rx="4" class="corridor"/>
+
+  <!-- ─── 신림선 승강장 북쪽 (B2-A01) — map_x=500, map_y=150 ─── -->
+  <rect x="200" y="80" width="600" height="150" rx="4" class="platform"/>
+  <text x="500" y="150" text-anchor="middle" class="floor-label">신림선 승강장 북쪽</text>
+  <text x="500" y="168" text-anchor="middle" class="area-label">B2-A01</text>
+  <!-- 신림선 선로 -->
+  <line x1="220" y1="120" x2="780" y2="120" stroke="#6c757d" stroke-width="4"/>
+  <line x1="220" y1="185" x2="780" y2="185" stroke="#6c757d" stroke-width="4"/>
+  <!-- 신림선 로고 색상 -->
+  <rect x="60" y="90" width="130" height="130" rx="4" fill="#c8a2c8" stroke="#8e44ad" stroke-width="2"/>
+  <text x="125" y="150" text-anchor="middle" font-size="12" font-weight="bold" fill="#fff">신림선</text>
+  <text x="125" y="168" text-anchor="middle" font-size="10" fill="#fff">S-Line</text>
+
+  <!-- ─── 신림선 승강장 남쪽 (B2-A02) — map_x=500, map_y=650 ─── -->
+  <rect x="200" y="570" width="600" height="150" rx="4" class="platform"/>
+  <text x="500" y="642" text-anchor="middle" class="floor-label">신림선 승강장 남쪽</text>
+  <text x="500" y="660" text-anchor="middle" class="area-label">B2-A02</text>
+  <!-- 선로 -->
+  <line x1="220" y1="615" x2="780" y2="615" stroke="#6c757d" stroke-width="4"/>
+  <line x1="220" y1="680" x2="780" y2="680" stroke="#6c757d" stroke-width="4"/>
+
+  <!-- ─── B2 엘리베이터 (B2-A03) — map_x=500, map_y=250 ─── -->
+  <rect x="440" y="230" width="120" height="80" rx="4" class="elevator"/>
+  <text x="500" y="268" text-anchor="middle" font-size="14" font-weight="bold" fill="#004E89">ELV</text>
+  <text x="500" y="286" text-anchor="middle" class="area-label">B2-A03</text>
+  <text x="500" y="302" text-anchor="middle" font-size="9" fill="#004E89">↑ B1 연결</text>
+
+  <!-- ─── B2 개찰구 (B2-A04) — map_x=500, map_y=400 ─── -->
+  <rect x="360" y="360" width="280" height="80" rx="4" class="gate"/>
+  <text x="500" y="398" text-anchor="middle" class="floor-label">B2 개찰구</text>
+  <text x="500" y="416" text-anchor="middle" class="area-label">B2-A04</text>
+  <!-- 개찰구 바 -->
+  <line x1="380" y1="385" x2="620" y2="385" stroke="#004E89" stroke-width="2" stroke-dasharray="15,8"/>
+
+  <!-- ─── 환승 통로 (B1으로 올라가는 계단/엘리베이터) ─── -->
+  <rect x="360" y="460" width="120" height="80" rx="4" class="transfer-up"/>
+  <text x="420" y="498" text-anchor="middle" font-size="11" fill="#155724">계단</text>
+  <text x="420" y="514" text-anchor="middle" font-size="10" fill="#155724">↑ B1</text>
+
+  <!-- ─── 범례 ─── -->
+  <rect x="750" y="620" width="180" height="100" rx="4" fill="rgba(255,255,255,0.9)" stroke="#ced4da"/>
+  <text x="760" y="638" font-size="11" font-weight="bold" fill="#333">범례</text>
+  <circle cx="765" cy="653" r="5" fill="#4A90D9"/>
+  <text x="775" y="657" font-size="10" fill="#333">지나온 경로</text>
+  <circle cx="765" cy="671" r="5" fill="#FF6B35"/>
+  <text x="775" y="675" font-size="10" fill="#333">앞으로 갈 경로</text>
+  <circle cx="765" cy="689" r="6" fill="#4A90D9"/>
+  <text x="775" y="693" font-size="10" fill="#333">현재 위치</text>
+  <polygon points="765,705 760,713 770,713" fill="#FF6B35"/>
+  <text x="775" y="713" font-size="10" fill="#333">목적지</text>
+
+  <!-- ─── Anchor 마커 (seed.sql map_x, map_y 기준) ─── -->
+  <!-- B2-A01: map_x=500, map_y=150 -->
+  <circle id="map-B2-A01" cx="500" cy="150" r="8" class="anchor-dot" data-anchor="B2-A01"/>
+  <text x="540" y="148" class="anchor-label">A01</text>
+
+  <!-- B2-A02: map_x=500, map_y=650 -->
+  <circle id="map-B2-A02" cx="500" cy="650" r="8" class="anchor-dot" data-anchor="B2-A02"/>
+  <text x="540" y="648" class="anchor-label">A02</text>
+
+  <!-- B2-A03: map_x=500, map_y=250 -->
+  <circle id="map-B2-A03" cx="500" cy="250" r="8" class="anchor-dot" data-anchor="B2-A03"/>
+  <text x="540" y="250" class="anchor-label">A03(ELV)</text>
+
+  <!-- B2-A04: map_x=500, map_y=400 -->
+  <circle id="map-B2-A04" cx="500" cy="400" r="8" class="anchor-dot" data-anchor="B2-A04"/>
+  <text x="540" y="400" class="anchor-label">A04</text>
+
+  <!-- ─── 경로 오버레이 레이어 (JS가 SVG polyline 추가) ─── -->
+  <g id="b2-path-overlay"></g>
+
+  <!-- ─── 현재위치 마커 ─── -->
+  <g id="b2-current-marker" style="display:none">
+    <circle r="14" fill="#4A90D9" fill-opacity="0.2">
+      <animate attributeName="r" values="10;18;10" dur="1.5s" repeatCount="indefinite"/>
+      <animate attributeName="fill-opacity" values="0.3;0.05;0.3" dur="1.5s" repeatCount="indefinite"/>
+    </circle>
+    <circle r="8" fill="#4A90D9" stroke="#fff" stroke-width="2"/>
+  </g>
+
+  <!-- ─── 목적지 마커 ─── -->
+  <g id="b2-dest-marker" style="display:none">
+    <polygon points="0,-14 4,-6 13,-6 6,0 9,9 0,4 -9,9 -6,0 -13,-6 -4,-6" fill="#FF6B35" stroke="#fff" stroke-width="1.5"/>
+  </g>
+</svg>

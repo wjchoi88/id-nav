@@ -1,19 +1,43 @@
-const http = require('node:http');
+'use strict';
+require('dotenv').config({ path: require('path').resolve(__dirname, '../../../.env') });
+const path = require('path');
+const fastify = require('fastify')({ logger: true });
+
+// plugins
+fastify.register(require('@fastify/cors'), { origin: true });
+fastify.register(require('@fastify/static'), {
+  root: path.join(__dirname, '../../mobile-web/public'),
+  prefix: '/',
+  decorateReply: false
+});
+fastify.register(require('@fastify/static'), {
+  root: path.join(__dirname, '../../admin-web/public'),
+  prefix: '/admin/',
+  decorateReply: false
+});
+fastify.register(require('@fastify/cookie'));
+
+// routes
+fastify.register(require('./routes/scan'));
+fastify.register(require('./routes/navigation'));
+fastify.register(require('./routes/session'));
+fastify.register(require('./routes/admin'));
+
+// health
+fastify.get('/health', async () => ({ ok: true }));
+
+// start — only bind when this file is the direct entry point
+if (require.main === module) {
+  const PORT = parseInt(process.env.PORT || '3100', 10);
+  fastify.listen({ port: PORT, host: '0.0.0.0' }, (err) => {
+    if (err) { fastify.log.error(err); process.exit(1); }
+  });
+}
+
+// Legacy export kept for unit tests (server-routes.test.js)
 const { findShortestPath } = require('./domain/navigation/a-star');
 const { shouldTerminateSession } = require('./domain/session/session-termination');
 const { sanitizePayload } = require('./domain/privacy/pii-guard');
-
-function sendJson(res, status, data) {
-  res.writeHead(status, { 'content-type': 'application/json; charset=utf-8' });
-  res.end(JSON.stringify(data));
-}
-
-async function readJsonBody(req) {
-  const chunks = [];
-  for await (const chunk of req) chunks.push(chunk);
-  if (chunks.length === 0) return {};
-  return JSON.parse(Buffer.concat(chunks).toString('utf8'));
-}
 
 function handleApiRequest(method, url, body) {
   if (method === 'POST' && url === '/api/navigation/path') {
@@ -22,37 +46,19 @@ function handleApiRequest(method, url, body) {
       body: findShortestPath(body.graph || {}, body.source, body.destination)
     };
   }
-
   if (method === 'POST' && url === '/api/session/terminate') {
     return {
       status: 200,
       body: { terminate: shouldTerminateSession(body) }
     };
   }
-
   if (method === 'POST' && url === '/api/privacy/sanitize') {
     return {
       status: 200,
       body: sanitizePayload(body)
     };
   }
-
-  return {
-    status: 404,
-    body: { error: 'not found' }
-  };
+  return { status: 404, body: { error: 'not found' } };
 }
 
-function createApiServer() {
-  return http.createServer(async (req, res) => {
-    try {
-      const body = await readJsonBody(req);
-      const result = handleApiRequest(req.method, req.url, body);
-      return sendJson(res, result.status, result.body);
-    } catch (error) {
-      return sendJson(res, 500, { error: error.message });
-    }
-  });
-}
-
-module.exports = { createApiServer, handleApiRequest };
+module.exports = { fastify, handleApiRequest };

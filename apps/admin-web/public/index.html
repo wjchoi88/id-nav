@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>샛강역 내비게이션 관리자</title>
+  <style>
+    body { font-family: sans-serif; margin: 0; padding: 16px; background: #f0f2f5; }
+    h1 { color: #333; font-size: 1.4rem; }
+    #app { max-width: 960px; margin: 0 auto; }
+    .card { background: #fff; border-radius: 8px; padding: 20px; margin-bottom: 16px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+    table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
+    th, td { text-align: left; padding: 8px 10px; border-bottom: 1px solid #eee; }
+    th { background: #f8f9fa; font-weight: 600; }
+    button { background: #1a73e8; color: #fff; border: none; border-radius: 6px; padding: 8px 16px; cursor: pointer; }
+    button.danger { background: #d93025; }
+    button:hover { opacity: 0.9; }
+    input, select { padding: 6px 10px; border: 1px solid #ccc; border-radius: 6px; font-size: 0.9rem; }
+    .stat { display: inline-block; margin: 8px 16px 8px 0; }
+    .stat strong { display: block; font-size: 1.6rem; color: #1a73e8; }
+    #login-form { max-width: 320px; }
+    #login-form input { display: block; width: 100%; margin-bottom: 10px; box-sizing: border-box; }
+    #main { display: none; }
+  </style>
+</head>
+<body>
+<div id="app">
+  <h1>샛강역 내비게이션 — 관리자</h1>
+
+  <!-- Login -->
+  <div id="login-card" class="card">
+    <h2>로그인</h2>
+    <div id="login-form">
+      <input type="text" id="username" placeholder="아이디">
+      <input type="password" id="password" placeholder="비밀번호">
+      <button onclick="doLogin()">로그인</button>
+      <p id="login-error" style="color:red;display:none">로그인 실패</p>
+    </div>
+  </div>
+
+  <!-- Main -->
+  <div id="main">
+    <div class="card" id="stats-card">
+      <h2>KPI (최근 7일)</h2>
+      <div id="kpi"></div>
+      <button onclick="loadStats()">새로고침</button>
+    </div>
+
+    <div class="card">
+      <h2>앵커 목록</h2>
+      <table id="anchor-table">
+        <thead><tr><th>코드</th><th>라벨</th><th>층</th><th>유형</th><th>목적지</th><th>QR</th><th>삭제</th></tr></thead>
+        <tbody id="anchor-tbody"></tbody>
+      </table>
+    </div>
+
+    <div class="card">
+      <h2>앵커 추가</h2>
+      <form onsubmit="addAnchor(event)" style="display:grid;gap:8px;grid-template-columns:1fr 1fr;">
+        <input name="anchorCode" placeholder="앵커 코드 (e.g. B1-A01)" required>
+        <input name="label" placeholder="라벨" required>
+        <select name="floor">
+          <option value="B1">B1</option>
+          <option value="B2">B2</option>
+        </select>
+        <select name="destinationCategory">
+          <option value="">카테고리 없음</option>
+          <option value="boarding">boarding</option>
+          <option value="facility">facility</option>
+          <option value="other">other</option>
+        </select>
+        <input name="mapX" type="number" placeholder="mapX">
+        <input name="mapY" type="number" placeholder="mapY">
+        <input name="elevX" type="number" placeholder="elevX">
+        <input name="elevY" type="number" placeholder="elevY">
+        <label><input type="checkbox" name="isExit"> 출구</label>
+        <label><input type="checkbox" name="isElevator"> 엘리베이터</label>
+        <label><input type="checkbox" name="isDestination"> 목적지</label>
+        <div></div>
+        <button type="submit" style="grid-column:1/-1">추가</button>
+      </form>
+    </div>
+
+    <button onclick="doLogout()" class="danger">로그아웃</button>
+  </div>
+</div>
+
+<script>
+const API = '';
+
+async function doLogin() {
+  const u = document.getElementById('username').value;
+  const p = document.getElementById('password').value;
+  const r = await fetch(API + '/api/admin/login', {
+    method: 'POST',
+    headers: { 'content-type': 'application/json' },
+    body: JSON.stringify({ username: u, password: p })
+  });
+  if (r.ok) {
+    document.getElementById('login-card').style.display = 'none';
+    document.getElementById('main').style.display = 'block';
+    loadAnchors();
+    loadStats();
+  } else {
+    document.getElementById('login-error').style.display = 'block';
+  }
+}
+
+async function doLogout() {
+  await fetch(API + '/api/admin/logout');
+  location.reload();
+}
+
+async function loadAnchors() {
+  const r = await fetch(API + '/api/admin/anchors');
+  if (!r.ok) return;
+  const anchors = await r.json();
+  const tbody = document.getElementById('anchor-tbody');
+  tbody.innerHTML = '';
+  anchors.forEach(a => {
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td>${a.anchor_code}</td>
+      <td>${a.label}</td>
+      <td>${a.floor}</td>
+      <td>${[a.is_exit && '출구', a.is_elevator && '엘리베이터'].filter(Boolean).join(', ') || '-'}</td>
+      <td>${a.destination_category || '-'}</td>
+      <td><a href="${API}/api/admin/anchors/${a.id}/qr" target="_blank">QR</a></td>
+      <td><button class="danger" onclick="deleteAnchor(${a.id})">삭제</button></td>
+    `;
+    tbody.appendChild(tr);
+  });
+}
+
+async function deleteAnchor(id) {
+  if (!confirm('삭제하시겠습니까?')) return;
+  await fetch(API + '/api/admin/anchors/' + id, { method: 'DELETE' });
+  loadAnchors();
+}
+
+async function addAnchor(e) {
+  e.preventDefault();
+  const f = e.target;
+  const body = {
+    anchorCode: f.anchorCode.value,
+    label: f.label.value,
+    floor: f.floor.value,
+    mapX: f.mapX.value ? parseInt(f.mapX.value) : null,
+    mapY: f.mapY.value ? parseInt(f.mapY.value) : null,
+    elevX: f.elevX.value ? parseInt(f.elevX.value) : null,
+    elevY: f.elevY.value ? parseInt(f.elevY.value) : null,
+    isExit: f.isExit.checked,
+    isElevator: f.isElevator.checked,
+    isDestination: f.isDestination.checked,
+    destinationCategory: f.destinationCategory.value || null,
+  };
+  const r = await fetch(API + '/api/admin/anchors', {
+    method: 'POST',
+    headers: { 'content-type': 'application/json' },
+    body: JSON.stringify(body)
+  });
+  if (r.ok) { f.reset(); loadAnchors(); }
+  else { alert('추가 실패: ' + (await r.text())); }
+}
+
+async function loadStats() {
+  const r = await fetch(API + '/api/admin/sessions/stats');
+  if (!r.ok) return;
+  const s = await r.json();
+  document.getElementById('kpi').innerHTML = `
+    <div class="stat"><strong>${s.totalSessions}</strong>총 세션</div>
+    <div class="stat"><strong>${s.arrivedSessions}</strong>도착 완료</div>
+    <div class="stat"><strong>${s.arrivalRate}%</strong>도착률</div>
+    <div class="stat"><strong>${s.avgDurationSec != null ? Math.round(s.avgDurationSec) + 's' : '-'}</strong>평균 소요시간</div>
+  `;
+}
+</script>
+</body>
+</html>

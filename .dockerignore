@@ -1,0 +1,8 @@
+node_modules
+.git
+.env
+*.test.js
+tests/e2e
+docs
+*.md
+.dockerignore

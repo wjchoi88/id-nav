@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>앵커 관리 - 샛강역 내비 관리자</title>
+  <link rel="stylesheet" href="/admin/css/admin.css">
+</head>
+<body>
+  <nav class="top-nav">
+    <a class="nav-brand" href="/admin/dashboard.html">
+      <svg width="20" height="20" viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5S10.62 6.5 12 6.5s2.5 1.12 2.5 2.5S13.38 11.5 12 11.5z"/></svg>
+      <span>샛강역 내비</span>
+    </a>
+    <div class="nav-links">
+      <a href="/admin/dashboard.html">대시보드</a>
+      <a href="/admin/anchors.html" class="active">앵커 관리</a>
+      <a href="/admin/sessions.html">세션 통계</a>
+    </div>
+    <div class="nav-right">
+      <button onclick="logout()">로그아웃</button>
+    </div>
+  </nav>
+
+  <main class="main-content">
+    <h1 class="page-title">앵커 관리</h1>
+
+    <!-- 앵커 등록 폼 -->
+    <div class="card">
+      <h2 class="section-title">앵커 등록</h2>
+      <div id="form-alert" style="display:none;" class="error-msg"></div>
+
+      <form id="anchor-form" onsubmit="handleRegister(event)">
+        <div class="form-row">
+          <div class="form-group">
+            <label for="anchorCode">앵커 코드 *</label>
+            <input type="text" id="anchorCode" name="anchorCode" placeholder="예: B1-A01" required>
+          </div>
+          <div class="form-group">
+            <label for="label">라벨 *</label>
+            <input type="text" id="label" name="label" placeholder="예: 1번 출구 앞" required>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="floor">층</label>
+            <select id="floor" name="floor">
+              <option value="B1">B1</option>
+              <option value="B2">B2</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="destinationCategory">목적지 분류</label>
+            <select id="destinationCategory" name="destinationCategory">
+              <option value="">없음</option>
+              <option value="boarding">boarding (승차위치)</option>
+              <option value="facility">facility (편의시설)</option>
+              <option value="other">other (기타)</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-row-3">
+          <div class="form-group">
+            <label for="mapX">지도 X</label>
+            <input type="number" id="mapX" name="mapX" placeholder="0">
+          </div>
+          <div class="form-group">
+            <label for="mapY">지도 Y</label>
+            <input type="number" id="mapY" name="mapY" placeholder="0">
+          </div>
+          <div class="form-group">
+            <label>&nbsp;</label>
+            <div style="display:flex;gap:8px;">
+              <div class="form-group" style="flex:1;margin-bottom:0;">
+                <input type="number" id="elevX" name="elevX" placeholder="입면X">
+              </div>
+              <div class="form-group" style="flex:1;margin-bottom:0;">
+                <input type="number" id="elevY" name="elevY" placeholder="입면Y">
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="checkbox-group">
+          <label class="checkbox-item">
+            <input type="checkbox" id="isExit" name="isExit">
+            출구
+          </label>
+          <label class="checkbox-item">
+            <input type="checkbox" id="isElevator" name="isElevator">
+            엘리베이터
+          </label>
+          <label class="checkbox-item">
+            <input type="checkbox" id="isDestination" name="isDestination">
+            목적지
+          </label>
+        </div>
+
+        <button type="submit" class="btn btn-primary" id="submit-btn">QR 생성 및 등록</button>
+      </form>
+
+      <!-- QR 미리보기 -->
+      <div id="qr-preview" class="qr-preview">
+        <h4>QR 코드 생성 완료</h4>
+        <div id="qr-svg-container"></div>
+        <div class="mt-16">
+          <a id="qr-download-btn" class="btn btn-secondary btn-sm" href="#" download>SVG 다운로드</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 앵커 목록 -->
+    <div class="card">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+        <h2 class="section-title" style="margin-bottom:0;border:none;">앵커 목록</h2>
+        <button class="btn btn-secondary btn-sm" onclick="loadAnchors()">새로고침</button>
+      </div>
+      <div class="anchor-summary-grid" style="margin-bottom:16px;">
+        <div class="anchor-stat-card">
+          <div class="stat-number" id="summary-total">–</div>
+          <div class="stat-label">총 앵커</div>
+        </div>
+        <div class="anchor-stat-card">
+          <div class="stat-number" id="summary-b1">–</div>
+          <div class="stat-label">B1층</div>
+        </div>
+        <div class="anchor-stat-card">
+          <div class="stat-number" id="summary-b2">–</div>
+          <div class="stat-label">B2층</div>
+        </div>
+        <div class="anchor-stat-card">
+          <div class="stat-number" id="summary-elevator">–</div>
+          <div class="stat-label">엘리베이터</div>
+        </div>
+      </div>
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th>앵커 코드</th>
+              <th>라벨</th>
+              <th>층</th>
+              <th>출구</th>
+              <th>엘리베이터</th>
+              <th>목적지</th>
+              <th>분류</th>
+              <th>작업</th>
+            </tr>
+          </thead>
+          <tbody id="anchor-tbody">
+            <tr><td colspan="8" class="loading">불러오는 중...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </main>
+
+  <script src="/admin/js/admin.js"></script>
+  <script>
+    (async function init() {
+      await checkAuth();
+      setActiveNav();
+      await loadAnchors();
+    })();
+
+    async function handleRegister(e) {
+      e.preventDefault();
+      const f = e.target;
+      const alertEl = document.getElementById('form-alert');
+      alertEl.style.display = 'none';
+
+      const body = {
+        anchorCode: f.anchorCode.value.trim(),
+        label: f.label.value.trim(),
+        floor: f.floor.value,
+        mapX: f.mapX.value !== '' ? parseInt(f.mapX.value) : null,
+        mapY: f.mapY.value !== '' ? parseInt(f.mapY.value) : null,
+        elevX: f.elevX.value !== '' ? parseInt(f.elevX.value) : null,
+        elevY: f.elevY.value !== '' ? parseInt(f.elevY.value) : null,
+        isExit: f.isExit.checked,
+        isElevator: f.isElevator.checked,
+        isDestination: f.isDestination.checked,
+        destinationCategory: f.destinationCategory.value || null,
+      };
+
+      const submitBtn = document.getElementById('submit-btn');
+      submitBtn.disabled = true;
+      submitBtn.textContent = '등록 중...';
+
+      try {
+        const result = await registerAnchor(body);
+        // QR 미리보기
+        if (result && result.qrSvg) {
+          showQrPreview(result.qrSvg, body.anchorCode);
+        } else if (result && result.id) {
+          // QR 별도 조회
+          try {
+            const qrRes = await apiFetch(`/api/admin/anchors/${result.id}/qr`);
+            if (qrRes.ok) {
+              const svgText = await qrRes.text();
+              showQrPreview(svgText, body.anchorCode);
+            }
+          } catch (qrErr) {
+            console.warn('QR 미리보기 실패', qrErr);
+          }
+        }
+        f.reset();
+        await loadAnchors();
+      } catch (err) {
+        alertEl.textContent = err.message || '앵커 등록 실패';
+        alertEl.style.display = 'block';
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'QR 생성 및 등록';
+      }
+    }
+  </script>
+</body>
+</html>
