@@ -1,0 +1,123 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 800" width="100%" id="floor-b3-svg">
+  <title>샛강역 B3 평면도 — 신림선 연결 통로 구조</title>
+  <defs>
+    <style>
+      .floor-label  { font: bold 13px sans-serif; fill: #004E89; }
+      .area-label   { font: 11px sans-serif; fill: #333; }
+      .anchor-label { font: 10px sans-serif; fill: #FF6B35; }
+      .anchor-dot   { fill: #FF6B35; stroke: #fff; stroke-width: 2; }
+      .wall         { fill: #F2F2F7; stroke: #8E8E93; stroke-width: 4; }
+      .corridor     { fill: #FFFFFF; stroke: #ced4da; stroke-width: 1.5; }
+      .platform     { fill: #b8d4f0; stroke: #004E89; stroke-width: 1.5; }
+      .hall         { fill: #E3F2FD; stroke: #90CAF9; stroke-width: 1.5; }
+      .stair        { fill: #EDE7F6; stroke: #7E57C2; stroke-width: 1.5; }
+      .elevator     { fill: #007AFF; stroke: #0056B3; stroke-width: 2; }
+      .escalator    { fill: #34C759; stroke: #1E7E34; stroke-width: 2; }
+    </style>
+    <!-- 계단 빗금 패턴 -->
+    <pattern id="b3-stair-pattern" width="10" height="10" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+      <line x1="0" y1="0" x2="0" y2="10" stroke="#7E57C2" stroke-width="1.5"/>
+    </pattern>
+    <marker id="b3-arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#FF6B35"/>
+    </marker>
+  </defs>
+
+  <!-- 배경 -->
+  <rect width="1000" height="800" fill="#F2F2F7"/>
+
+  <!-- 층 제목 -->
+  <text x="500" y="35" text-anchor="middle" font-size="18" font-weight="bold" fill="#004E89">샛강역 B3 평면도 (신림선)</text>
+
+  <!-- 층 번호 크게 -->
+  <text x="940" y="760" text-anchor="middle" font-size="64" font-weight="bold" fill="#8E8E93" opacity="0.25">B3</text>
+
+  <!-- ─── 외벽 ─── -->
+  <rect x="50" y="60" width="900" height="710" rx="8" class="wall"/>
+
+  <!-- ─── 통로: 중앙 메인 가로 통로 (y=350~450, x=50~950) ─── -->
+  <rect x="50" y="350" width="900" height="100" rx="0" class="corridor"/>
+
+  <!-- ─── 통로: 좌측 세로 통로 (x=100~200, y=100~700) ─── -->
+  <rect x="100" y="60" width="100" height="710" rx="0" class="corridor"/>
+
+  <!-- ─── 통로: 우측 세로 통로 (x=800~900, y=100~700) ─── -->
+  <rect x="800" y="60" width="100" height="710" rx="0" class="corridor"/>
+
+  <!-- ─── 계단: 좌상단 (x=50~200, y=100~200) ─── -->
+  <rect x="50" y="75" width="150" height="130" rx="4" class="stair"/>
+  <rect x="50" y="75" width="150" height="130" rx="4" fill="url(#b3-stair-pattern)" fill-opacity="0.5"/>
+  <text x="125" y="130" text-anchor="middle" font-size="16" font-weight="bold" fill="#7E57C2">계단</text>
+  <text x="125" y="150" text-anchor="middle" font-size="11" fill="#555">↑ B2</text>
+
+  <!-- ─── 엘리베이터: 우상단 (x=800~950, y=100~200) ─── -->
+  <rect x="800" y="75" width="150" height="130" rx="4" class="elevator"/>
+  <text x="875" y="130" text-anchor="middle" font-size="20" font-weight="bold" fill="#FFFFFF">ELV</text>
+  <text x="875" y="153" text-anchor="middle" font-size="12" fill="#E0F0FF">↑ B2</text>
+
+  <!-- ─── 대합실: 중앙 공간 (x=300~700, y=200~600) ─── -->
+  <rect x="300" y="200" width="400" height="400" rx="6" class="hall"/>
+  <text x="500" y="370" text-anchor="middle" font-size="22" font-weight="bold" fill="#1565C0">대합실</text>
+  <text x="500" y="395" text-anchor="middle" font-size="13" fill="#555">B3 대합실</text>
+
+  <!-- 개찰구 라인 표시 -->
+  <line x1="310" y1="430" x2="690" y2="430" stroke="#004E89" stroke-width="2" stroke-dasharray="14,7"/>
+  <text x="500" y="447" text-anchor="middle" font-size="11" fill="#004E89">개찰구</text>
+
+  <!-- ─── 에스컬레이터: 대합실 좌측 입구 ─── -->
+  <rect x="210" y="350" width="85" height="50" rx="4" class="escalator"/>
+  <text x="252" y="380" text-anchor="middle" font-size="13" font-weight="bold" fill="#FFFFFF">ESC</text>
+
+  <!-- ─── 에스컬레이터: 대합실 우측 입구 ─── -->
+  <rect x="705" y="350" width="85" height="50" rx="4" class="escalator"/>
+  <text x="747" y="380" text-anchor="middle" font-size="13" font-weight="bold" fill="#FFFFFF">ESC</text>
+
+  <!-- ─── 하단 승강장: 신림선 B3 승강장 (x=100~900, y=620~760) ─── -->
+  <rect x="100" y="625" width="800" height="130" rx="6" class="platform"/>
+  <text x="500" y="688" text-anchor="middle" font-size="20" font-weight="bold" fill="#004E89">신림선 B3 승강장</text>
+  <text x="500" y="710" text-anchor="middle" font-size="12" fill="#555">신림선 ← 여의도 방면 / 관악산 방면 →</text>
+  <!-- 선로 표시 -->
+  <line x1="110" y1="655" x2="890" y2="655" stroke="#004E89" stroke-width="3" stroke-dasharray="12,6"/>
+  <line x1="110" y1="735" x2="890" y2="735" stroke="#004E89" stroke-width="3" stroke-dasharray="12,6"/>
+
+  <!-- ─── 통로 연결 표시 (좌하 / 우하) ─── -->
+  <!-- 좌하단 계단 -->
+  <rect x="50" y="590" width="140" height="90" rx="4" class="stair"/>
+  <rect x="50" y="590" width="140" height="90" rx="4" fill="url(#b3-stair-pattern)" fill-opacity="0.5"/>
+  <text x="120" y="635" text-anchor="middle" font-size="14" font-weight="bold" fill="#7E57C2">계단</text>
+  <text x="120" y="653" text-anchor="middle" font-size="10" fill="#555">↓ B4</text>
+
+  <!-- 우하단 엘리베이터 -->
+  <rect x="810" y="590" width="140" height="90" rx="4" class="elevator"/>
+  <text x="880" y="635" text-anchor="middle" font-size="16" font-weight="bold" fill="#FFFFFF">ELV</text>
+  <text x="880" y="655" text-anchor="middle" font-size="11" fill="#E0F0FF">↓ B4</text>
+
+  <!-- ─── 범례 ─── -->
+  <rect x="60" y="545" width="195" height="60" rx="4" fill="rgba(255,255,255,0.92)" stroke="#ced4da"/>
+  <text x="70" y="562" font-size="11" font-weight="bold" fill="#333">범례</text>
+  <rect x="70" y="568" width="14" height="10" fill="#FFFFFF" stroke="#ced4da"/>
+  <text x="90" y="577" font-size="10" fill="#333">통로 (이동 가능 구역)</text>
+  <rect x="70" y="582" width="14" height="10" fill="#E3F2FD" stroke="#90CAF9"/>
+  <text x="90" y="591" font-size="10" fill="#333">대합실 / 공간</text>
+  <rect x="135" y="568" width="14" height="10" fill="#007AFF" stroke="#0056B3"/>
+  <text x="154" y="577" font-size="10" fill="#333">엘리베이터</text>
+  <rect x="135" y="582" width="14" height="10" fill="#34C759" stroke="#1E7E34"/>
+  <text x="154" y="591" font-size="10" fill="#333">에스컬레이터</text>
+
+  <!-- ─── 경로 오버레이 레이어 (JS가 SVG polyline 추가) ─── -->
+  <g id="b3-path-overlay"></g>
+
+  <!-- ─── 현재위치 마커 (JS가 cx/cy 조정) ─── -->
+  <g id="b3-current-marker" style="display:none">
+    <circle r="14" fill="#4A90D9" fill-opacity="0.2">
+      <animate attributeName="r" values="10;18;10" dur="1.5s" repeatCount="indefinite"/>
+      <animate attributeName="fill-opacity" values="0.3;0.05;0.3" dur="1.5s" repeatCount="indefinite"/>
+    </circle>
+    <circle r="8" fill="#4A90D9" stroke="#fff" stroke-width="2"/>
+  </g>
+
+  <!-- ─── 목적지 마커 (JS가 위치 조정) ─── -->
+  <g id="b3-dest-marker" style="display:none">
+    <polygon points="0,-14 4,-6 13,-6 6,0 9,9 0,4 -9,9 -6,0 -13,-6 -4,-6" fill="#FF6B35" stroke="#fff" stroke-width="1.5"/>
+  </g>
+</svg>

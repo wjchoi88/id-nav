@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>샛강역 내비게이션</title>
-  <link rel="stylesheet" href="/css/app.css">
+  <link rel="stylesheet" href="/css/app.css?v=20260308e">
 </head>
 <body>
 <div id="app">
@@ -27,7 +27,55 @@
   <header id="app-header">
     <span class="app-title">샛강역 내비게이션</span>
     <!-- 언어 선택 버튼 -->
-    <button id="lang-btn" onclick="toggleLang()" aria-label="언어 변경 / Change Language">EN</button>
+    <div id="lang-wrap">
+      <button id="lang-btn" onclick="toggleLangMenu()" aria-haspopup="listbox" aria-label="언어 선택">KOR</button>
+      <ul id="lang-menu" role="listbox" aria-label="언어 목록">
+        <li role="option" onclick="setLangAndClose('ko')">한국어</li>
+        <li role="option" onclick="setLangAndClose('en')">English</li>
+        <li role="option" onclick="setLangAndClose('zh')">中文(简体)</li>
+        <li role="option" onclick="setLangAndClose('zh-Hant')">中文(繁體)</li>
+        <li role="option" onclick="setLangAndClose('ja')">日本語</li>
+        <li role="option" onclick="setLangAndClose('es')">Español</li>
+        <li role="option" onclick="setLangAndClose('fr')">Français</li>
+        <li role="option" onclick="setLangAndClose('de')">Deutsch</li>
+        <li role="option" onclick="setLangAndClose('pt')">Português</li>
+        <li role="option" onclick="setLangAndClose('ru')">Русский</li>
+        <li role="option" onclick="setLangAndClose('it')">Italiano</li>
+        <li role="option" onclick="setLangAndClose('th')">ภาษาไทย</li>
+        <li role="option" onclick="setLangAndClose('vi')">Tiếng Việt</li>
+        <li role="option" onclick="setLangAndClose('id')">Bahasa Indonesia</li>
+        <li role="option" onclick="setLangAndClose('ms')">Bahasa Melayu</li>
+        <li role="option" onclick="setLangAndClose('tl')">Filipino</li>
+        <li role="option" onclick="setLangAndClose('hi')">हिन्दी</li>
+        <li role="option" onclick="setLangAndClose('bn')">বাংলা</li>
+        <li role="option" onclick="setLangAndClose('ta')">தமிழ்</li>
+        <li role="option" onclick="setLangAndClose('te')">తెలుగు</li>
+        <li role="option" onclick="setLangAndClose('ur')">اردو</li>
+        <li role="option" onclick="setLangAndClose('mn')">Монгол</li>
+        <li role="option" onclick="setLangAndClose('ne')">नेपाली</li>
+        <li role="option" onclick="setLangAndClose('si')">සිංහල</li>
+        <li role="option" onclick="setLangAndClose('nl')">Nederlands</li>
+        <li role="option" onclick="setLangAndClose('sv')">Svenska</li>
+        <li role="option" onclick="setLangAndClose('no')">Norsk</li>
+        <li role="option" onclick="setLangAndClose('da')">Dansk</li>
+        <li role="option" onclick="setLangAndClose('fi')">Suomi</li>
+        <li role="option" onclick="setLangAndClose('pl')">Polski</li>
+        <li role="option" onclick="setLangAndClose('cs')">Čeština</li>
+        <li role="option" onclick="setLangAndClose('sk')">Slovenčina</li>
+        <li role="option" onclick="setLangAndClose('hu')">Magyar</li>
+        <li role="option" onclick="setLangAndClose('ro')">Română</li>
+        <li role="option" onclick="setLangAndClose('bg')">Български</li>
+        <li role="option" onclick="setLangAndClose('el')">Ελληνικά</li>
+        <li role="option" onclick="setLangAndClose('uk')">Українська</li>
+        <li role="option" onclick="setLangAndClose('sr')">Српски</li>
+        <li role="option" onclick="setLangAndClose('hr')">Hrvatski</li>
+        <li role="option" onclick="setLangAndClose('sl')">Slovenščina</li>
+        <li role="option" onclick="setLangAndClose('ar')">العربية</li>
+        <li role="option" onclick="setLangAndClose('he')">עברית</li>
+        <li role="option" onclick="setLangAndClose('fa')">فارسی</li>
+        <li role="option" onclick="setLangAndClose('tr')">Türkçe</li>
+      </ul>
+    </div>
     <!-- 교통약자 토글 -->
     <label class="mobility-toggle-wrap" title="교통약자 모드">
       <span class="mobility-toggle-label">교통약자</span>
@@ -51,8 +99,10 @@
 
     <!-- 평면도 탭 바 -->
     <nav id="floor-tabs" role="tablist">
-      <button class="floor-tab-btn active" role="tab" aria-selected="true"  data-tab="b1" onclick="switchTab('b1')">B1 평면도</button>
-      <button class="floor-tab-btn"        role="tab" aria-selected="false" data-tab="b2" onclick="switchTab('b2')">B2 평면도</button>
+      <button class="floor-tab-btn active" role="tab" aria-selected="true"  data-tab="b1" onclick="switchTab('b1')">B1</button>
+      <button class="floor-tab-btn"        role="tab" aria-selected="false" data-tab="b2" onclick="switchTab('b2')">B2</button>
+      <button class="floor-tab-btn"        role="tab" aria-selected="false" data-tab="b3" onclick="switchTab('b3')">B3</button>
+      <button class="floor-tab-btn"        role="tab" aria-selected="false" data-tab="b4" onclick="switchTab('b4')">B4</button>
     </nav>
 
     <!-- 평면도 패널 -->
@@ -70,6 +120,21 @@
         <div class="map-container">
           <img src="/images/floor-b2.svg" alt="B2 평면도" style="display:block;width:100%;height:auto;">
           <svg id="overlay-b2" class="path-overlay" viewBox="0 0 1000 800" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"></svg>
+        </div>
+      </div>
+      <!-- B3 평면도 -->
+      <div class="map-panel" id="tab-b3" role="tabpanel">
+        <div class="map-container">
+          <img src="/images/floor-b3.svg" alt="B3 평면도" style="display:block;width:100%;height:auto;">
+          <svg id="overlay-b3" class="path-overlay" viewBox="0 0 1000 800" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"></svg>
+        </div>
+      </div>
+
+      <!-- B4 평면도 -->
+      <div class="map-panel" id="tab-b4" role="tabpanel">
+        <div class="map-container">
+          <img src="/images/floor-b4.svg" alt="B4 평면도" style="display:block;width:100%;height:auto;">
+          <svg id="overlay-b4" class="path-overlay" viewBox="0 0 1000 800" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"></svg>
         </div>
       </div>
     </div><!-- /#floor-panel -->
@@ -109,7 +174,7 @@
 </div><!-- /#app -->
 
 <script src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.js"></script>
-<script src="/js/qr-scanner.js?v=20260308c"></script>
-<script src="/js/app.js?v=20260308c"></script>
+<script src="/js/qr-scanner.js?v=20260308e"></script>
+<script src="/js/app.js?v=20260308e"></script>
 </body>
 </html>
