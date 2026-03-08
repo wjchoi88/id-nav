@@ -23,6 +23,12 @@ fastify.register(require('./routes/navigation'));
 fastify.register(require('./routes/session'));
 fastify.register(require('./routes/admin'));
 
+// admin redirect: /admin → /admin/login.html
+fastify.get('/admin', async (req, reply) => reply.redirect('/admin/login.html'));
+
+// test page: /test → /test.html
+fastify.get('/test', async (req, reply) => reply.redirect('/test.html'));
+
 // health
 fastify.get('/health', async () => ({ ok: true }));
 

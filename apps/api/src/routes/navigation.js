@@ -107,7 +107,8 @@ async function navigationRoutes(fastify) {
    */
   fastify.get('/api/navigation/destinations', async (request, reply) => {
     const { rows } = await pool.query(
-      `SELECT id, anchor_code, label, floor, destination_category
+      `SELECT id, anchor_code, label, floor, destination_category,
+              map_x, map_y, elev_x, elev_y
        FROM anchors
        WHERE is_destination = TRUE
        ORDER BY label`
@@ -120,6 +121,25 @@ async function navigationRoutes(fastify) {
       grouped[cat].push(row);
     }
 
+    return grouped;
+  });
+
+  /**
+   * GET /api/test/anchors
+   * 테스트 페이지용 — 모든 앵커를 층별로 반환 (인증 불필요)
+   */
+  fastify.get('/api/test/anchors', async () => {
+    const { rows } = await pool.query(
+      `SELECT id, anchor_code, label, floor, is_exit, is_elevator, is_destination,
+              destination_category, qr_url
+       FROM anchors
+       ORDER BY floor DESC, anchor_code`
+    );
+    const grouped = {};
+    for (const row of rows) {
+      if (!grouped[row.floor]) grouped[row.floor] = [];
+      grouped[row.floor].push(row);
+    }
     return grouped;
   });
 }
