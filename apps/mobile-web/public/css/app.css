@@ -4,20 +4,20 @@
 
 /* ── CSS 변수 ──────────────────────────────────────────────── */
 :root {
-  --color-primary:    #FF6B35;
-  --color-primary-dk: #e05a25;
-  --color-secondary:  #004E89;
-  --color-secondary-lt: #1a6fad;
-  --color-bg:         #f8f9fa;
+  --color-primary:    #2563EB;
+  --color-primary-dk: #1d4ed8;
+  --color-secondary:  #1E293B;
+  --color-secondary-lt: #334155;
+  --color-bg:         #F8FAFC;
   --color-surface:    #ffffff;
   --color-border:     #dee2e6;
-  --color-text:       #212529;
-  --color-text-muted: #6c757d;
+  --color-text:       #1E293B;
+  --color-text-muted: #64748B;
   --color-success:    #28a745;
   --color-warning:    #ffc107;
   --color-info:       #17a2b8;
   --color-traveled:   #4A90D9;
-  --color-route:      #FF6B35;
+  --color-route:      #F97316;
 
   --header-height:    56px;
   --tab-height:       44px;
@@ -81,8 +81,8 @@ body {
 }
 
 #app-header .app-title {
-  font-size: 17px;
-  font-weight: 700;
+  font-size: 18px;
+  font-weight: 800;
   letter-spacing: -0.3px;
   flex: 1;
 }
@@ -178,11 +178,16 @@ body {
 /* 수직약도 (항상 상단 표시, 고정 높이) */
 #elev-panel {
   flex: 0 0 auto;
-  border-bottom: 3px solid #FF6B35;
-  background: var(--color-surface);
+  border-bottom: 3px solid #F97316;
+  background: var(--color-bg);
 }
 
 #elev-panel .map-container {
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+  margin: 8px;
+  padding: 8px;
   overflow: visible;
 }
 
@@ -195,10 +200,12 @@ body {
 /* 평면도 탭 바 */
 #floor-tabs {
   display: flex;
-  height: 40px;
-  background: var(--color-secondary);
+  height: 48px;
+  background: #F1F5F9;
   flex-shrink: 0;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+  padding: 4px;
+  gap: 4px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.08);
 }
 
 .floor-tab-btn {
@@ -207,28 +214,23 @@ body {
   background: transparent;
   font-size: 14px;
   font-weight: 600;
-  color: rgba(255,255,255,0.6);
+  color: #64748B;
   cursor: pointer;
   position: relative;
-  transition: color var(--transition-fast);
+  transition: color var(--transition-fast), background var(--transition-fast);
   padding: 0 4px;
   letter-spacing: -0.2px;
+  border-radius: 8px;
 }
 
 .floor-tab-btn.active {
   color: #fff;
-  background: rgba(255,255,255,0.1);
+  background: #2563EB;
+  border-radius: 8px;
 }
 
 .floor-tab-btn.active::after {
-  content: '';
-  position: absolute;
-  bottom: 0;
-  left: 16%;
-  right: 16%;
-  height: 3px;
-  background: var(--color-primary);
-  border-radius: 3px 3px 0 0;
+  display: none;
 }
 
 /* 평면도 패널 컨테이너 */
@@ -236,6 +238,15 @@ body {
   flex: 0 0 auto;
   min-height: 350px;
   position: relative;
+  background: #F8FAFC;
+}
+
+#floor-panel .map-panel .map-container {
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+  margin: 8px;
+  overflow: hidden;
 }
 
 .map-panel {
@@ -285,14 +296,14 @@ body {
 
 /* ── 경로 안내 정보 바 ─────────────────────────────────────── */
 #nav-info-bar {
-  background: linear-gradient(135deg, #003d70, var(--color-secondary));
+  background: #2563EB;
   color: #fff;
   padding: 10px 16px;
   display: none;
   align-items: center;
   gap: 12px;
   flex-shrink: 0;
-  border-top: 2px solid var(--color-primary);
+  border-top: none;
 }
 
 #nav-info-bar.visible {
@@ -327,9 +338,9 @@ body {
 }
 
 #nav-info-bar .distance-value {
-  font-size: 26px;
+  font-size: 22px;
   font-weight: 800;
-  color: #007AFF;
+  color: #fff;
   line-height: 1;
 }
 
@@ -347,8 +358,17 @@ body {
   border-left: 2px solid rgba(255,255,255,0.3);
 }
 .nav-dir-arrow {
-  font-size: 22px;
+  font-size: 32px;
   line-height: 1;
+  width: 44px;
+  height: 44px;
+  background: #fff;
+  color: #2563EB;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
 }
 .nav-dir-text {
   font-size: 13px;
@@ -432,10 +452,10 @@ body {
 
 /* 도착지 선택 버튼 */
 #dest-select-btn {
-  background: var(--color-primary);
+  background: #2563EB;
   color: #fff;
   border: none;
-  border-radius: var(--border-radius);
+  border-radius: 12px;
   padding: 10px 18px;
   font-size: 13px;
   font-weight: 600;
@@ -484,7 +504,7 @@ body {
   left: 0;
   right: 0;
   background: var(--color-surface);
-  border-radius: 16px 16px 0 0;
+  border-radius: 20px 20px 0 0;
   box-shadow: var(--shadow-lg);
   z-index: 200;
   transform: translateY(100%);
@@ -619,8 +639,12 @@ body {
   text-align: left;
 }
 
+.dest-item:hover {
+  background: #EFF6FF;
+}
+
 .dest-item:active {
-  background: var(--color-bg);
+  background: #DBEAFE;
 }
 
 .dest-item .dest-icon {
@@ -647,7 +671,7 @@ body {
 
 .dest-item .dest-arrow {
   font-size: 14px;
-  color: var(--color-primary);
+  color: #2563EB;
   flex-shrink: 0;
 }
 

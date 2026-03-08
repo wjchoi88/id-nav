@@ -302,6 +302,10 @@ async function init() {
 // ─────────────────────────────────────────────
 
 async function continueSession() {
+  // 지도 화면을 먼저 표시하고 목적지 목록을 로드
+  showMapView();
+  await loadDestinations();
+
   try {
     const res = await fetch(`${API}/api/session/scan`, {
       method: 'POST',
@@ -313,7 +317,6 @@ async function continueSession() {
       // 세션 만료 등 → 새 세션 시작
       localStorage.removeItem('idnav_session');
       state.sessionId = null;
-      await loadDestinations();
       showDestinationPanel();
       return;
     }
@@ -335,9 +338,14 @@ async function continueSession() {
 
     if (state.destination) {
       await calculatePath();
+    } else {
+      // 목적지 미설정 시 선택 패널 표시
+      showDestinationPanel();
     }
   } catch (err) {
     console.error('continueSession 오류:', err);
+    // 오류 발생 시에도 지도는 유지
+    showMapView();
   }
 }
 

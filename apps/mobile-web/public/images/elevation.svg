@@ -1,28 +1,28 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 400" width="600" height="400" id="elevation-svg">
   <defs>
     <style>
-      .floor-label { font: bold 14px sans-serif; fill: #004E89; }
-      .area-label  { font: 11px sans-serif; fill: #333; }
-      .anchor-dot  { fill: #FF6B35; stroke: #fff; stroke-width: 2; }
-      .stair-line  { stroke: #666; stroke-width: 2; fill: none; }
-      .elev-box    { fill: #e8f4fd; stroke: #004E89; stroke-width: 2; }
+      .floor-label { font: bold 13px sans-serif; fill: #1E293B; }
+      .area-label  { font: 11px sans-serif; fill: #475569; }
+      .anchor-dot  { fill: #F97316; stroke: #fff; stroke-width: 2; }
+      .stair-line  { stroke: #94A3B8; stroke-width: 1.5; fill: none; }
+      .elev-box    { fill: #DBEAFE; stroke: #2563EB; stroke-width: 2; }
     </style>
   </defs>
 
   <!-- Background -->
-  <rect width="600" height="400" fill="#f8f9fa"/>
+  <rect width="600" height="400" fill="#F8FAFC"/>
 
   <!-- Title -->
-  <text x="300" y="30" text-anchor="middle" font="bold 16px sans-serif" font-weight="bold" fill="#004E89" font-size="16">샛강역 입면도</text>
+  <text x="300" y="30" text-anchor="middle" font="bold 16px sans-serif" font-weight="bold" fill="#1E293B" font-size="16">샛강역 입면도</text>
 
   <!-- ─── 지상 ─── -->
-  <rect x="50" y="50" width="500" height="50" rx="4" fill="#e9ecef" stroke="#adb5bd" stroke-width="1.5"/>
+  <rect x="50" y="50" width="500" height="50" rx="4" fill="#E2E8F0" stroke="#93C5FD" stroke-width="1.5"/>
   <text x="300" y="81" text-anchor="middle" class="floor-label">지상 (출구)</text>
   <!-- 1번 출구 -->
-  <rect x="100" y="55" width="80" height="40" rx="2" fill="#fff" stroke="#adb5bd"/>
+  <rect x="100" y="55" width="80" height="40" rx="2" fill="#fff" stroke="#93C5FD"/>
   <text x="140" y="80" text-anchor="middle" class="area-label">1번 출구</text>
   <!-- 2번 출구 -->
-  <rect x="420" y="55" width="80" height="40" rx="2" fill="#fff" stroke="#adb5bd"/>
+  <rect x="420" y="55" width="80" height="40" rx="2" fill="#fff" stroke="#93C5FD"/>
   <text x="460" y="80" text-anchor="middle" class="area-label">2번 출구</text>
 
   <!-- 계단 지상→B1 -->
@@ -30,32 +30,32 @@
   <line x1="460" y1="100" x2="460" y2="150" class="stair-line" stroke-dasharray="4,3"/>
 
   <!-- ─── B1 층 ─── -->
-  <rect x="50" y="150" width="500" height="100" rx="4" fill="#dce8f5" stroke="#004E89" stroke-width="1.5"/>
+  <rect x="50" y="150" width="500" height="100" rx="4" fill="#DBEAFE" stroke="#93C5FD" stroke-width="1.5"/>
   <text x="70" y="175" class="floor-label">B1</text>
-  <text x="70" y="192" font-size="10" fill="#666">9호선</text>
+  <text x="70" y="192" font-size="10" fill="#475569">9호선</text>
 
   <!-- B1 내부 구역 표시 -->
   <!-- 승강장 동쪽 -->
-  <rect x="420" y="160" width="110" height="80" rx="3" fill="#b8d4f0" stroke="#004E89" stroke-width="1"/>
+  <rect x="420" y="160" width="110" height="80" rx="3" fill="#BFDBFE" stroke="#93C5FD" stroke-width="1"/>
   <text x="475" y="198" text-anchor="middle" class="area-label">9호선 승강장</text>
-  <text x="475" y="212" text-anchor="middle" font-size="9" fill="#555">동쪽</text>
+  <text x="475" y="212" text-anchor="middle" font-size="9" fill="#475569">동쪽</text>
   <!-- 승강장 서쪽 -->
-  <rect x="70" y="160" width="110" height="80" rx="3" fill="#b8d4f0" stroke="#004E89" stroke-width="1"/>
+  <rect x="70" y="160" width="110" height="80" rx="3" fill="#BFDBFE" stroke="#93C5FD" stroke-width="1"/>
   <text x="125" y="198" text-anchor="middle" class="area-label">9호선 승강장</text>
-  <text x="125" y="212" text-anchor="middle" font-size="9" fill="#555">서쪽</text>
+  <text x="125" y="212" text-anchor="middle" font-size="9" fill="#475569">서쪽</text>
   <!-- 개찰구 -->
-  <rect x="240" y="160" width="120" height="40" rx="3" fill="#c8dff5" stroke="#004E89" stroke-width="1"/>
+  <rect x="240" y="160" width="120" height="40" rx="3" fill="#DBEAFE" stroke="#93C5FD" stroke-width="1"/>
   <text x="300" y="185" text-anchor="middle" class="area-label">개찰구</text>
   <!-- 편의점 -->
-  <rect x="190" y="210" width="80" height="30" rx="2" fill="#fff3cd" stroke="#ffc107" stroke-width="1"/>
-  <text x="230" y="229" text-anchor="middle" font-size="10" fill="#555">편의점</text>
+  <rect x="190" y="210" width="80" height="30" rx="2" fill="#FEF3C7" stroke="#F59E0B" stroke-width="1"/>
+  <text x="230" y="229" text-anchor="middle" font-size="10" fill="#475569">편의점</text>
   <!-- 엘리베이터 B1 -->
   <rect x="280" y="205" width="40" height="40" rx="3" class="elev-box"/>
-  <text x="300" y="221" text-anchor="middle" font-size="10" fill="#004E89">ELV</text>
-  <text x="300" y="235" text-anchor="middle" font-size="9" fill="#004E89">B1</text>
+  <text x="300" y="221" text-anchor="middle" font-size="10" fill="#2563EB">ELV</text>
+  <text x="300" y="235" text-anchor="middle" font-size="9" fill="#2563EB">B1</text>
   <!-- 환승통로 -->
-  <rect x="330" y="205" width="80" height="40" rx="3" fill="#d4edda" stroke="#28a745" stroke-width="1"/>
-  <text x="370" y="229" text-anchor="middle" font-size="10" fill="#155724">환승통로</text>
+  <rect x="330" y="205" width="80" height="40" rx="3" fill="#D1FAE5" stroke="#34D399" stroke-width="1"/>
+  <text x="370" y="229" text-anchor="middle" font-size="10" fill="#065F46">환승통로</text>
 
   <!-- Anchor markers (elev_x, elev_y mapped to this viewBox) -->
   <!-- B1-A01 9호선승강장동 elev_x=820 → scaled 820/1000*600=492, elev_y=200 → 150+200/400*100=200 -->
@@ -78,27 +78,27 @@
   <!-- 계단 B1→B2 (환승통로쪽) -->
   <line x1="370" y1="250" x2="370" y2="290" class="stair-line" stroke-dasharray="4,3"/>
   <!-- 엘리베이터 연결선 B1→B2 -->
-  <line x1="300" y1="250" x2="300" y2="290" stroke="#004E89" stroke-width="2"/>
-  <text x="310" y="275" font-size="9" fill="#004E89">ELV</text>
+  <line x1="300" y1="250" x2="300" y2="290" stroke="#2563EB" stroke-width="2"/>
+  <text x="310" y="275" font-size="9" fill="#2563EB">ELV</text>
 
   <!-- ─── B2 층 ─── -->
-  <rect x="50" y="290" width="500" height="90" rx="4" fill="#dce8f5" stroke="#004E89" stroke-width="1.5"/>
+  <rect x="50" y="290" width="500" height="90" rx="4" fill="#E0E7FF" stroke="#93C5FD" stroke-width="1.5"/>
   <text x="70" y="315" class="floor-label">B2</text>
-  <text x="70" y="332" font-size="10" fill="#666">신림선</text>
+  <text x="70" y="332" font-size="10" fill="#475569">신림선</text>
 
   <!-- B2 내부 구역 -->
   <!-- 신림선 승강장 북 -->
-  <rect x="190" y="300" width="120" height="35" rx="3" fill="#b8d4f0" stroke="#004E89" stroke-width="1"/>
+  <rect x="190" y="300" width="120" height="35" rx="3" fill="#C7D2FE" stroke="#93C5FD" stroke-width="1"/>
   <text x="250" y="322" text-anchor="middle" class="area-label">신림선 북쪽</text>
   <!-- 신림선 승강장 남 -->
-  <rect x="190" y="345" width="120" height="30" rx="3" fill="#b8d4f0" stroke="#004E89" stroke-width="1"/>
+  <rect x="190" y="345" width="120" height="30" rx="3" fill="#C7D2FE" stroke="#93C5FD" stroke-width="1"/>
   <text x="250" y="365" text-anchor="middle" class="area-label">신림선 남쪽</text>
   <!-- B2 엘리베이터 -->
   <rect x="270" y="295" width="40" height="40" rx="3" class="elev-box"/>
-  <text x="290" y="311" text-anchor="middle" font-size="10" fill="#004E89">ELV</text>
-  <text x="290" y="325" text-anchor="middle" font-size="9" fill="#004E89">B2</text>
+  <text x="290" y="311" text-anchor="middle" font-size="10" fill="#2563EB">ELV</text>
+  <text x="290" y="325" text-anchor="middle" font-size="9" fill="#2563EB">B2</text>
   <!-- B2 개찰구 -->
-  <rect x="330" y="315" width="90" height="35" rx="3" fill="#c8dff5" stroke="#004E89" stroke-width="1"/>
+  <rect x="330" y="315" width="90" height="35" rx="3" fill="#DBEAFE" stroke="#93C5FD" stroke-width="1"/>
   <text x="375" y="337" text-anchor="middle" class="area-label">B2 개찰구</text>
 
   <!-- B2 Anchor markers -->
