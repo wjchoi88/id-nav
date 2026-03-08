@@ -29,7 +29,7 @@ CREATE TABLE anchors (
     id                   SERIAL PRIMARY KEY,
     anchor_code          VARCHAR(50)  NOT NULL UNIQUE,   -- 예: 'B1-A01'
     label                VARCHAR(200) NOT NULL,           -- 예: '9호선 승강장 중앙'
-    floor                VARCHAR(10)  NOT NULL,           -- 'B1' | 'B2'
+    floor                VARCHAR(10)  NOT NULL,           -- 'B1' | 'B2' | 'B3' | 'B4'
     map_x                INTEGER,                         -- SVG 평면도 픽셀 x (임시)
     map_y                INTEGER,                         -- SVG 평면도 픽셀 y (임시)
     elev_x               INTEGER,                         -- 입면도 픽셀 x (임시)
@@ -53,7 +53,7 @@ ALTER TABLE anchors
 -- floor 값 제약
 ALTER TABLE anchors
     ADD CONSTRAINT chk_anchors_floor
-    CHECK (floor IN ('B1', 'B2'));
+    CHECK (floor IN ('B1', 'B2', 'B3', 'B4'));
 
 -- updated_at 자동 갱신 함수
 CREATE OR REPLACE FUNCTION fn_set_updated_at()

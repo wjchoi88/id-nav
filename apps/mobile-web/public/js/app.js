@@ -406,7 +406,8 @@ async function calculatePath() {
     // 경로 시작 층으로 평면도 자동 전환
     if (state.currentPath.length > 0) {
       const startFloor = state.currentPath[0].floor;
-      switchTab(startFloor === 'B2' ? 'b2' : 'b1');
+      const floorTabMap = { B1: 'b1', B2: 'b2', B3: 'b3', B4: 'b4' };
+      switchTab(floorTabMap[startFloor] || 'b1');
     }
     renderAllMaps();
   } catch (err) {
@@ -466,6 +467,8 @@ function renderAllMaps() {
   renderElevation();
   renderFloorMap('B1');
   renderFloorMap('B2');
+  renderFloorMap('B3');
+  renderFloorMap('B4');
   updateNavInfo();
 }
 
@@ -664,7 +667,8 @@ function switchTab(tabId) {
   document.querySelectorAll('.map-panel').forEach(el => {
     el.classList.toggle('active', el.id === `tab-${tabId}`);
   });
-  state.currentFloor = tabId === 'b1' ? 'B1' : 'B2';
+  const floorMap = { b1: 'B1', b2: 'B2', b3: 'B3', b4: 'B4' };
+  state.currentFloor = floorMap[tabId] || 'B1';
 }
 
 // ─────────────────────────────────────────────

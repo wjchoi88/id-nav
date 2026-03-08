@@ -89,7 +89,8 @@ INSERT INTO anchors (
     'https://id-nav.databuilder.co.kr/scan/B1-A08', 'placeholder'
 );
 
--- ─── B2 (4개) ────────────────────────────────────────────────────────────────
+-- ─── B2 (2개) ────────────────────────────────────────────────────────────────
+-- B2: 9호선↔신림선 환승 개찰구 층
 INSERT INTO anchors (
     anchor_code, label, floor,
     map_x, map_y, elev_x, elev_y,
@@ -97,44 +98,53 @@ INSERT INTO anchors (
     destination_category,
     qr_url, qr_hmac_sig
 ) VALUES
--- B2-A01: 신림선 승강장 북쪽
+-- B2-A01: B2 엘리베이터
 (
-    'B2-A01', '신림선 승강장 북쪽', 'B2',
-    500, 150, 250, 317,
-    FALSE, FALSE, TRUE,
-    'boarding',
-    'https://id-nav.databuilder.co.kr/scan/B2-A01', 'placeholder'
-),
--- B2-A02: 신림선 승강장 남쪽
-(
-    'B2-A02', '신림선 승강장 남쪽', 'B2',
-    500, 650, 250, 360,
-    FALSE, FALSE, TRUE,
-    'boarding',
-    'https://id-nav.databuilder.co.kr/scan/B2-A02', 'placeholder'
-),
--- B2-A03: B2 엘리베이터
-(
-    'B2-A03', 'B2 엘리베이터', 'B2',
+    'B2-A01', 'B2 엘리베이터', 'B2',
     500, 250, 290, 318,
     FALSE, TRUE, FALSE,
     NULL,
-    'https://id-nav.databuilder.co.kr/scan/B2-A03', 'placeholder'
+    'https://id-nav.databuilder.co.kr/scan/B2-A01', 'placeholder'
 ),
--- B2-A04: B2 개찰구
+-- B2-A02: B2 개찰구 (신림선 환승)
 (
-    'B2-A04', 'B2 개찰구', 'B2',
+    'B2-A02', 'B2 개찰구', 'B2',
     500, 400, 375, 332,
     FALSE, FALSE, FALSE,
     NULL,
-    'https://id-nav.databuilder.co.kr/scan/B2-A04', 'placeholder'
+    'https://id-nav.databuilder.co.kr/scan/B2-A02', 'placeholder'
+);
+
+-- ─── B4 (2개) ────────────────────────────────────────────────────────────────
+-- B4: 신림선 승강장 층
+INSERT INTO anchors (
+    anchor_code, label, floor,
+    map_x, map_y, elev_x, elev_y,
+    is_exit, is_elevator, is_destination,
+    destination_category,
+    qr_url, qr_hmac_sig
+) VALUES
+-- B4-A01: 신림선 승강장 북쪽
+(
+    'B4-A01', '신림선 승강장 북쪽', 'B4',
+    500, 150, 250, 430,
+    FALSE, FALSE, TRUE,
+    'boarding',
+    'https://id-nav.databuilder.co.kr/scan/B4-A01', 'placeholder'
+),
+-- B4-A02: 신림선 승강장 남쪽
+(
+    'B4-A02', '신림선 승강장 남쪽', 'B4',
+    500, 650, 250, 470,
+    FALSE, FALSE, TRUE,
+    'boarding',
+    'https://id-nav.databuilder.co.kr/scan/B4-A02', 'placeholder'
 );
 
 -- =============================================================================
 -- 3. nav_graph_edges — 샛강역 연결 구조 (양방향)
---    anchor_id 참조 순서: B1-A01~A08 → id 1~8, B2-A01~A04 → id 9~12
+--    anchor_id 참조 순서: B1-A01~A08 → id 1~8, B2-A01~A02 → id 9~10, B4-A01~A02 → id 11~12
 -- =============================================================================
-
 -- anchor_code → id 매핑을 위한 헬퍼 함수 (seed 내부용)
 -- WITH 절로 anchor_id를 동적으로 조회하여 INSERT
 
@@ -177,29 +187,29 @@ FROM (VALUES
     ('B1-A08', 'B1-A06', 20.00, 'walk', TRUE),
 
     -- ── B1 엘리베이터 ↔ B2 엘리베이터 (층간 이동) ─────────────────────────
-    ('B1-A06', 'B2-A03', 30.00, 'elevator', TRUE),
-    ('B2-A03', 'B1-A06', 30.00, 'elevator', TRUE),
+    ('B1-A06', 'B2-A01', 30.00, 'elevator', TRUE),
+    ('B2-A01', 'B1-A06', 30.00, 'elevator', TRUE),
 
     -- ── B1 환승통로 ↔ B2 개찰구 (계단, 교통약자 이용 불가) ─────────────────
-    ('B1-A08', 'B2-A04', 15.00, 'stairs', FALSE),
-    ('B2-A04', 'B1-A08', 15.00, 'stairs', FALSE),
+    ('B1-A08', 'B2-A02', 15.00, 'stairs', FALSE),
+    ('B2-A02', 'B1-A08', 15.00, 'stairs', FALSE),
 
     -- ── B2 내 walk 연결 (양방향) ──────────────────────────────────────────
     -- 개찰구↔엘리베이터
-    ('B2-A04', 'B2-A03', 10.00, 'walk', TRUE),
-    ('B2-A03', 'B2-A04', 10.00, 'walk', TRUE),
-    -- 개찰구↔승강장 북쪽
-    ('B2-A04', 'B2-A01', 25.00, 'walk', TRUE),
-    ('B2-A01', 'B2-A04', 25.00, 'walk', TRUE),
-    -- 개찰구↔승강장 남쪽
-    ('B2-A04', 'B2-A02', 25.00, 'walk', TRUE),
-    ('B2-A02', 'B2-A04', 25.00, 'walk', TRUE),
-    -- 승강장 북↔남
-    ('B2-A01', 'B2-A02', 40.00, 'walk', TRUE),
-    ('B2-A02', 'B2-A01', 40.00, 'walk', TRUE),
-    -- 엘리베이터↔승강장 북쪽
-    ('B2-A03', 'B2-A01', 20.00, 'walk', TRUE),
-    ('B2-A01', 'B2-A03', 20.00, 'walk', TRUE)
+    ('B2-A02', 'B2-A01', 10.00, 'walk', TRUE),
+    ('B2-A01', 'B2-A02', 10.00, 'walk', TRUE),
+
+    -- ── B2 개찰구 ↔ B4 승강장 (계단, 교통약자 이용 불가) ──────────────────
+    -- 신림선 환승: B2 개찰구 → B4 승강장 (계단 2구간)
+    ('B2-A02', 'B4-A01', 30.00, 'stairs', FALSE),
+    ('B4-A01', 'B2-A02', 30.00, 'stairs', FALSE),
+    ('B2-A02', 'B4-A02', 30.00, 'stairs', FALSE),
+    ('B4-A02', 'B2-A02', 30.00, 'stairs', FALSE),
+
+    -- ── B4 내 walk 연결 (양방향) ──────────────────────────────────────────
+    -- 신림선 승강장 북↔남
+    ('B4-A01', 'B4-A02', 40.00, 'walk', TRUE),
+    ('B4-A02', 'B4-A01', 40.00, 'walk', TRUE)
 
 ) AS edges(from_code, to_code, dist, etype, accessible)
 JOIN a AS f ON f.anchor_code = edges.from_code
