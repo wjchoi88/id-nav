@@ -19,6 +19,6 @@ COPY apps/ ./apps/
 EXPOSE 3100
 
 HEALTHCHECK --interval=15s --timeout=5s --retries=3 \
-  CMD wget -qO- http://localhost:3100/health || exit 1
+  CMD wget -qO- http://127.0.0.1:3100/health || exit 1
 
 CMD ["node", "apps/api/src/server.js"]

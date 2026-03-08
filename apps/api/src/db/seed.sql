@@ -6,10 +6,10 @@
 -- =============================================================================
 -- 1. admin_users
 --    password: admin1234
---    bcrypt hash: $2b$10$rOF6zbMFBROCGXwqwNhO0.tSI3w6u5XEsGpPj2SnLI9ZlJZ0BMQN6
+--    bcrypt hash: $2b$10$AYwEcx4n9KNzZzUc/rUI0.KWbDuijeYc9TA9Smq7KrNYidvjSbSzC
 -- =============================================================================
 INSERT INTO admin_users (username, password_hash) VALUES
-    ('admin', '$2b$10$rOF6zbMFBROCGXwqwNhO0.tSI3w6u5XEsGpPj2SnLI9ZlJZ0BMQN6')
+    ('admin', '$2b$10$AYwEcx4n9KNzZzUc/rUI0.KWbDuijeYc9TA9Smq7KrNYidvjSbSzC')
 ON CONFLICT (username) DO NOTHING;
 
 -- =============================================================================
@@ -27,7 +27,7 @@ INSERT INTO anchors (
 -- B1-A01: 9호선 승강장 동쪽
 (
     'B1-A01', '9호선 승강장 동쪽', 'B1',
-    800, 400, 820, 200,
+    800, 400, 475, 195,
     FALSE, FALSE, TRUE,
     'boarding',
     'https://id-nav.databuilder.co.kr/scan/B1-A01', 'placeholder'
@@ -35,7 +35,7 @@ INSERT INTO anchors (
 -- B1-A02: 9호선 승강장 서쪽
 (
     'B1-A02', '9호선 승강장 서쪽', 'B1',
-    200, 400, 180, 200,
+    200, 400, 125, 195,
     FALSE, FALSE, TRUE,
     'boarding',
     'https://id-nav.databuilder.co.kr/scan/B1-A02', 'placeholder'
@@ -43,7 +43,7 @@ INSERT INTO anchors (
 -- B1-A03: 개찰구 앞
 (
     'B1-A03', '개찰구 앞', 'B1',
-    500, 300, 500, 180,
+    500, 300, 300, 180,
     FALSE, FALSE, FALSE,
     NULL,
     'https://id-nav.databuilder.co.kr/scan/B1-A03', 'placeholder'
@@ -51,7 +51,7 @@ INSERT INTO anchors (
 -- B1-A04: 1번 출구
 (
     'B1-A04', '1번 출구', 'B1',
-    150, 100, 150, 100,
+    150, 100, 140,  95,
     TRUE, FALSE, TRUE,
     'other',
     'https://id-nav.databuilder.co.kr/scan/B1-A04', 'placeholder'
@@ -59,7 +59,7 @@ INSERT INTO anchors (
 -- B1-A05: 2번 출구
 (
     'B1-A05', '2번 출구', 'B1',
-    850, 100, 850, 100,
+    850, 100, 460,  95,
     TRUE, FALSE, TRUE,
     'other',
     'https://id-nav.databuilder.co.kr/scan/B1-A05', 'placeholder'
@@ -67,7 +67,7 @@ INSERT INTO anchors (
 -- B1-A06: 엘리베이터
 (
     'B1-A06', 'B1 엘리베이터', 'B1',
-    500, 200, 500, 150,
+    500, 200, 300, 215,
     FALSE, TRUE, FALSE,
     NULL,
     'https://id-nav.databuilder.co.kr/scan/B1-A06', 'placeholder'
@@ -75,7 +75,7 @@ INSERT INTO anchors (
 -- B1-A07: 편의점 앞
 (
     'B1-A07', '편의점 앞', 'B1',
-    350, 300, 350, 180,
+    350, 300, 230, 225,
     FALSE, FALSE, TRUE,
     'facility',
     'https://id-nav.databuilder.co.kr/scan/B1-A07', 'placeholder'
@@ -83,7 +83,7 @@ INSERT INTO anchors (
 -- B1-A08: 환승 통로 입구
 (
     'B1-A08', '환승 통로 입구', 'B1',
-    500, 500, 500, 220,
+    500, 500, 370, 225,
     FALSE, FALSE, FALSE,
     NULL,
     'https://id-nav.databuilder.co.kr/scan/B1-A08', 'placeholder'
@@ -100,7 +100,7 @@ INSERT INTO anchors (
 -- B2-A01: 신림선 승강장 북쪽
 (
     'B2-A01', '신림선 승강장 북쪽', 'B2',
-    500, 150, 500, 300,
+    500, 150, 250, 317,
     FALSE, FALSE, TRUE,
     'boarding',
     'https://id-nav.databuilder.co.kr/scan/B2-A01', 'placeholder'
@@ -108,7 +108,7 @@ INSERT INTO anchors (
 -- B2-A02: 신림선 승강장 남쪽
 (
     'B2-A02', '신림선 승강장 남쪽', 'B2',
-    500, 650, 500, 380,
+    500, 650, 250, 360,
     FALSE, FALSE, TRUE,
     'boarding',
     'https://id-nav.databuilder.co.kr/scan/B2-A02', 'placeholder'
@@ -116,7 +116,7 @@ INSERT INTO anchors (
 -- B2-A03: B2 엘리베이터
 (
     'B2-A03', 'B2 엘리베이터', 'B2',
-    500, 250, 500, 330,
+    500, 250, 290, 318,
     FALSE, TRUE, FALSE,
     NULL,
     'https://id-nav.databuilder.co.kr/scan/B2-A03', 'placeholder'
@@ -124,7 +124,7 @@ INSERT INTO anchors (
 -- B2-A04: B2 개찰구
 (
     'B2-A04', 'B2 개찰구', 'B2',
-    500, 400, 500, 350,
+    500, 400, 375, 332,
     FALSE, FALSE, FALSE,
     NULL,
     'https://id-nav.databuilder.co.kr/scan/B2-A04', 'placeholder'
@@ -177,8 +177,8 @@ FROM (VALUES
     ('B1-A08', 'B1-A06', 20.00, 'walk', TRUE),
 
     -- ── B1 엘리베이터 ↔ B2 엘리베이터 (층간 이동) ─────────────────────────
-    ('B1-A06', 'B2-A03',  0.00, 'elevator', TRUE),
-    ('B2-A03', 'B1-A06',  0.00, 'elevator', TRUE),
+    ('B1-A06', 'B2-A03', 30.00, 'elevator', TRUE),
+    ('B2-A03', 'B1-A06', 30.00, 'elevator', TRUE),
 
     -- ── B1 환승통로 ↔ B2 개찰구 (계단, 교통약자 이용 불가) ─────────────────
     ('B1-A08', 'B2-A04', 15.00, 'stairs', FALSE),

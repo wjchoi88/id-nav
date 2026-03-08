@@ -105,8 +105,12 @@ async function adminRoutes(fastify) {
       SELECT floor, COUNT(*) AS cnt FROM anchors GROUP BY floor ORDER BY floor
     `);
     const totalAnchors = await pool.query('SELECT COUNT(*) AS cnt FROM anchors');
+    const s = rows[0];
     return {
-      sessions: rows[0],
+      totalSessions: Number(s.total_sessions),
+      arrivedSessions: Number(s.arrived_count),
+      arrivalSuccessRate: s.arrival_rate != null ? Number(s.arrival_rate) : null,
+      avgDurationSeconds: s.avg_minutes != null ? Number(s.avg_minutes) * 60 : null,
       anchors: {
         total: totalAnchors.rows[0].cnt,
         byFloor: anchorStats.rows
@@ -118,8 +122,8 @@ async function adminRoutes(fastify) {
   fastify.get('/api/admin/sessions', { preHandler: requireAdmin }, async () => {
     const { rows } = await pool.query(`
       SELECT s.id, s.is_mobility_impaired, s.created_at, s.arrived_at,
-        sa.anchor_code AS start_anchor, sa.label AS start_label,
-        da.anchor_code AS dest_anchor, da.label AS dest_label,
+        sa.anchor_code AS start_anchor_id, sa.label AS start_anchor_label,
+        da.anchor_code AS destination_anchor_id, da.label AS destination_anchor_label,
         ROUND(EXTRACT(EPOCH FROM (s.arrived_at - s.created_at))/60::numeric, 1) AS duration_min
       FROM nav_sessions s
       LEFT JOIN anchors sa ON sa.id = s.start_anchor_id
