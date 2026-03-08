@@ -21,7 +21,7 @@
 
   --header-height:    56px;
   --tab-height:       44px;
-  --bottom-bar-height: 60px;
+  --bottom-bar-height: 68px;
   --border-radius:    8px;
   --shadow-sm:        0 1px 3px rgba(0,0,0,0.12);
   --shadow-md:        0 4px 12px rgba(0,0,0,0.15);
@@ -46,7 +46,7 @@ html, body {
 
 body {
   font-family: -apple-system, BlinkMacSystemFont, 'Noto Sans KR', 'Segoe UI', sans-serif;
-  font-size: 14px;
+  font-size: 15px;
   color: var(--color-text);
   background: var(--color-bg);
   -webkit-font-smoothing: antialiased;
@@ -87,6 +87,23 @@ body {
   flex: 1;
 }
 
+#lang-btn {
+  background: rgba(255,255,255,0.15);
+  border: 1px solid rgba(255,255,255,0.35);
+  color: #fff;
+  font-size: 12px;
+  font-weight: 700;
+  padding: 4px 9px;
+  border-radius: 14px;
+  cursor: pointer;
+  white-space: nowrap;
+  flex-shrink: 0;
+  letter-spacing: 0.5px;
+}
+#lang-btn:active {
+  background: rgba(255,255,255,0.28);
+}
+
 #app-header .status-badge {
   font-size: 11px;
   padding: 3px 8px;
@@ -104,58 +121,86 @@ body {
   color: var(--color-text);
 }
 
-/* ── 지도 탭 바 ─────────────────────────────────────────────── */
-#map-tabs {
+/* ── 지도 영역 (입면도 + 평면도 분할, 스크롤 허용) ─────────── */
+#map-area {
+  flex: 1;
   display: flex;
-  height: var(--tab-height);
-  background: var(--color-surface);
-  border-bottom: 1px solid var(--color-border);
-  flex-shrink: 0;
+  flex-direction: column;
+  overflow-y: auto;
+  overflow-x: hidden;
+  background: var(--color-bg);
+  min-height: 0;
+  -webkit-overflow-scrolling: touch;
 }
 
-.map-tab-btn {
+/* 수직약도 (항상 상단 표시, 고정 높이) */
+#elev-panel {
+  flex: 0 0 auto;
+  min-height: 150px;
+  border-bottom: 3px solid #FF6B35;
+  background: var(--color-surface);
+}
+
+#elev-panel .map-container {
+  overflow: visible;
+}
+
+#elev-panel .map-container img {
+  width: 100%;
+  object-fit: contain;
+  max-height: 150px;
+  display: block;
+}
+
+/* 평면도 탭 바 */
+#floor-tabs {
+  display: flex;
+  height: 40px;
+  background: var(--color-secondary);
+  flex-shrink: 0;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+}
+
+.floor-tab-btn {
   flex: 1;
   border: none;
   background: transparent;
-  font-size: 13px;
-  font-weight: 500;
-  color: var(--color-text-muted);
+  font-size: 14px;
+  font-weight: 600;
+  color: rgba(255,255,255,0.6);
   cursor: pointer;
   position: relative;
   transition: color var(--transition-fast);
   padding: 0 4px;
+  letter-spacing: -0.2px;
 }
 
-.map-tab-btn.active {
-  color: var(--color-secondary);
-  font-weight: 700;
+.floor-tab-btn.active {
+  color: #fff;
+  background: rgba(255,255,255,0.1);
 }
 
-.map-tab-btn.active::after {
+.floor-tab-btn.active::after {
   content: '';
   position: absolute;
   bottom: 0;
-  left: 12%;
-  right: 12%;
+  left: 16%;
+  right: 16%;
   height: 3px;
-  background: var(--color-secondary);
+  background: var(--color-primary);
   border-radius: 3px 3px 0 0;
 }
 
-/* ── 지도 영역 ───────────────────────────────────────────────── */
-#map-area {
-  flex: 1;
+/* 평면도 패널 컨테이너 */
+#floor-panel {
+  flex: 0 0 auto;
+  min-height: 350px;
   position: relative;
-  overflow: hidden;
-  background: var(--color-bg);
 }
 
 .map-panel {
-  position: absolute;
-  inset: 0;
   display: none;
   flex-direction: column;
-  overflow: hidden;
 }
 
 .map-panel.active {
@@ -200,13 +245,14 @@ body {
 
 /* ── 경로 안내 정보 바 ─────────────────────────────────────── */
 #nav-info-bar {
-  background: var(--color-secondary);
+  background: linear-gradient(135deg, #003d70, var(--color-secondary));
   color: #fff;
-  padding: 8px 16px;
+  padding: 10px 16px;
   display: none;
   align-items: center;
   gap: 12px;
   flex-shrink: 0;
+  border-top: 2px solid var(--color-primary);
 }
 
 #nav-info-bar.visible {
@@ -216,21 +262,23 @@ body {
 #nav-info-bar .nav-info-item {
   display: flex;
   flex-direction: column;
-  gap: 1px;
+  gap: 2px;
 }
 
 #nav-info-bar .nav-info-label {
   font-size: 10px;
-  opacity: 0.75;
+  opacity: 0.8;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
 #nav-info-bar .nav-info-value {
-  font-size: 13px;
-  font-weight: 600;
+  font-size: 15px;
+  font-weight: 700;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  max-width: 100px;
+  max-width: 140px;
 }
 
 #nav-info-bar .nav-distance {
@@ -239,14 +287,16 @@ body {
 }
 
 #nav-info-bar .distance-value {
-  font-size: 20px;
-  font-weight: 700;
-  color: var(--color-primary);
+  font-size: 26px;
+  font-weight: 800;
+  color: #FFB347;
+  line-height: 1;
 }
 
 #nav-info-bar .distance-unit {
-  font-size: 11px;
-  opacity: 0.8;
+  font-size: 12px;
+  font-weight: 600;
+  opacity: 0.85;
 }
 
 /* ── 하단 고정 바 ────────────────────────────────────────────── */

@@ -20,11 +20,14 @@
     <p id="scanner-error" style="display:none; color:#FF6B35; margin-top:12px; font-size:13px; text-align:center; padding:0 24px;">
       카메라 접근이 거부되었습니다.<br>브라우저 설정에서 카메라 권한을 허용해 주세요.
     </p>
+    <!-- scanner-error 텍스트는 applyI18n()이 언어에 맞게 업데이트함 -->
   </section>
 
   <!-- ===== 상단 헤더 ===== -->
   <header id="app-header">
     <span class="app-title">샛강역 내비게이션</span>
+    <!-- 언어 선택 버튼 -->
+    <button id="lang-btn" onclick="toggleLang()" aria-label="언어 변경 / Change Language">EN</button>
     <!-- 교통약자 토글 -->
     <label class="mobility-toggle-wrap" title="교통약자 모드">
       <span class="mobility-toggle-label">교통약자</span>
@@ -35,39 +38,41 @@
     </label>
   </header>
 
-  <!-- ===== 지도 탭 바 ===== -->
-  <nav id="map-tabs" role="tablist">
-    <button class="map-tab-btn active" role="tab" aria-selected="true"  data-tab="elev" onclick="switchTab('elev')">입면도</button>
-    <button class="map-tab-btn"        role="tab" aria-selected="false" data-tab="b1"   onclick="switchTab('b1')">B1 평면도</button>
-    <button class="map-tab-btn"        role="tab" aria-selected="false" data-tab="b2"   onclick="switchTab('b2')">B2 평면도</button>
-  </nav>
-
-  <!-- ===== 지도 영역 ===== -->
+  <!-- ===== 지도 영역 (입면도 + 평면도 동시 표시) ===== -->
   <div id="map-area">
 
-    <!-- 탭: 입면도 -->
-    <div class="map-panel active" id="tab-elev" role="tabpanel">
+    <!-- 수직약도 (항상 표시) -->
+    <div id="elev-panel">
       <div class="map-container">
-        <img src="/images/elevation.svg" alt="입면도" style="display:block;width:100%;height:auto;">
-        <svg id="overlay-elev" class="path-overlay" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"></svg>
+        <img src="/images/elevation.svg" alt="수직약도" style="display:block;width:100%;height:auto;">
+        <svg id="overlay-elev" class="path-overlay" viewBox="0 0 600 400" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"></svg>
       </div>
     </div>
 
-    <!-- 탭: B1 평면도 -->
-    <div class="map-panel" id="tab-b1" role="tabpanel">
-      <div class="map-container">
-        <img src="/images/floor-b1.svg" alt="B1 평면도" style="display:block;width:100%;height:auto;">
-        <svg id="overlay-b1" class="path-overlay" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"></svg>
-      </div>
-    </div>
+    <!-- 평면도 탭 바 -->
+    <nav id="floor-tabs" role="tablist">
+      <button class="floor-tab-btn active" role="tab" aria-selected="true"  data-tab="b1" onclick="switchTab('b1')">B1 평면도</button>
+      <button class="floor-tab-btn"        role="tab" aria-selected="false" data-tab="b2" onclick="switchTab('b2')">B2 평면도</button>
+    </nav>
 
-    <!-- 탭: B2 평면도 -->
-    <div class="map-panel" id="tab-b2" role="tabpanel">
-      <div class="map-container">
-        <img src="/images/floor-b2.svg" alt="B2 평면도" style="display:block;width:100%;height:auto;">
-        <svg id="overlay-b2" class="path-overlay" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"></svg>
+    <!-- 평면도 패널 -->
+    <div id="floor-panel">
+      <!-- B1 평면도 -->
+      <div class="map-panel active" id="tab-b1" role="tabpanel">
+        <div class="map-container">
+          <img src="/images/floor-b1.svg" alt="B1 평면도" style="display:block;width:100%;height:auto;">
+          <svg id="overlay-b1" class="path-overlay" viewBox="0 0 1000 800" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"></svg>
+        </div>
       </div>
-    </div>
+
+      <!-- B2 평면도 -->
+      <div class="map-panel" id="tab-b2" role="tabpanel">
+        <div class="map-container">
+          <img src="/images/floor-b2.svg" alt="B2 평면도" style="display:block;width:100%;height:auto;">
+          <svg id="overlay-b2" class="path-overlay" viewBox="0 0 1000 800" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"></svg>
+        </div>
+      </div>
+    </div><!-- /#floor-panel -->
 
   </div><!-- /#map-area -->
 
@@ -104,7 +109,7 @@
 </div><!-- /#app -->
 
 <script src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.js"></script>
-<script src="/js/qr-scanner.js"></script>
-<script src="/js/app.js"></script>
+<script src="/js/qr-scanner.js?v=20260308c"></script>
+<script src="/js/app.js?v=20260308c"></script>
 </body>
 </html>
