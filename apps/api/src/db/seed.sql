@@ -26,7 +26,7 @@ INSERT INTO anchors (
 ) VALUES
 -- B1-A01: 9호선 승강장 동쪽
 (
-    'B1-A01', '9호선 승강장 동쪽', 'B1',
+    'B1-A01', '9호선 (중앙보훈병원 방면)', 'B1',
     800, 400, 475, 195,
     FALSE, FALSE, TRUE,
     'boarding',
@@ -34,7 +34,7 @@ INSERT INTO anchors (
 ),
 -- B1-A02: 9호선 승강장 서쪽
 (
-    'B1-A02', '9호선 승강장 서쪽', 'B1',
+    'B1-A02', '9호선 (여의도 방면)', 'B1',
     200, 400, 125, 195,
     FALSE, FALSE, TRUE,
     'boarding',
@@ -87,6 +87,22 @@ INSERT INTO anchors (
     FALSE, FALSE, FALSE,
     NULL,
     'https://id-nav.databuilder.co.kr/scan/B1-A08', 'placeholder'
+),
+-- B1-A09: 3번 출구
+(
+    'B1-A09', '3번 출구', 'B1',
+    350, 700, 220, 95,
+    TRUE, FALSE, TRUE,
+    'other',
+    'https://id-nav.databuilder.co.kr/scan/B1-A09', 'placeholder'
+),
+-- B1-A10: 4번 출구
+(
+    'B1-A10', '4번 출구', 'B1',
+    650, 700, 380, 95,
+    TRUE, FALSE, TRUE,
+    'other',
+    'https://id-nav.databuilder.co.kr/scan/B1-A10', 'placeholder'
 );
 
 -- ─── B2 (2개) ────────────────────────────────────────────────────────────────
@@ -126,7 +142,7 @@ INSERT INTO anchors (
 ) VALUES
 -- B4-A01: 신림선 승강장 북쪽
 (
-    'B4-A01', '신림선 승강장 북쪽', 'B4',
+    'B4-A01', '신림선 (관악산 방면)', 'B4',
     500, 150, 250, 430,
     FALSE, FALSE, TRUE,
     'boarding',
@@ -134,7 +150,7 @@ INSERT INTO anchors (
 ),
 -- B4-A02: 신림선 승강장 남쪽
 (
-    'B4-A02', '신림선 승강장 남쪽', 'B4',
+    'B4-A02', '신림선 (샛강 방면)', 'B4',
     500, 650, 250, 470,
     FALSE, FALSE, TRUE,
     'boarding',
@@ -209,7 +225,13 @@ FROM (VALUES
     -- ── B4 내 walk 연결 (양방향) ──────────────────────────────────────────
     -- 신림선 승강장 북↔남
     ('B4-A01', 'B4-A02', 40.00, 'walk', TRUE),
-    ('B4-A02', 'B4-A01', 40.00, 'walk', TRUE)
+    ('B4-A02', 'B4-A01', 40.00, 'walk', TRUE),
+
+    -- ── B1 3번·4번 출구 연결 (양방향) ────────────────────────────────────
+    ('B1-A03', 'B1-A09', 20.00, 'walk', TRUE),
+    ('B1-A09', 'B1-A03', 20.00, 'walk', TRUE),
+    ('B1-A03', 'B1-A10', 20.00, 'walk', TRUE),
+    ('B1-A10', 'B1-A03', 20.00, 'walk', TRUE)
 
 ) AS edges(from_code, to_code, dist, etype, accessible)
 JOIN a AS f ON f.anchor_code = edges.from_code

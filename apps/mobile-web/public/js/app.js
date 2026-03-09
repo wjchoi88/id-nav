@@ -353,12 +353,16 @@ async function selectDestination(anchor) {
   state.destination = anchor;
   hideDestinationPanel();
 
+  // 출발지 없이 접속 시(QR 미스캔) → 1번 출구를 기본 출발지로 사용
+  const startAnchorCode = state.anchorCode || 'B1-A04';
+  if (!state.anchorCode) state.anchorCode = 'B1-A04';
+
   try {
     // 세션 시작
     const res = await fetch(`${API}/api/session/start`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ anchorCode: state.anchorCode, isMobilityImpaired: state.isMobilityImpaired })
+      body: JSON.stringify({ anchorCode: startAnchorCode, isMobilityImpaired: state.isMobilityImpaired })
     });
     if (!res.ok) throw new Error('세션 시작 실패');
     const data = await res.json();
@@ -495,7 +499,8 @@ function getStrokeWidth() {
 }
 
 function renderFloorMap(floor) {
-  const svgId = floor === 'B1' ? 'overlay-b1' : 'overlay-b2';
+  const svgIdMap = { B1: 'overlay-b1', B2: 'overlay-b2', B3: 'overlay-b3', B4: 'overlay-b4' };
+  const svgId = svgIdMap[floor];
   const svg = document.getElementById(svgId);
   if (!svg) return;
   svg.innerHTML = '';
