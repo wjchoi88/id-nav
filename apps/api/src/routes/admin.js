@@ -4,6 +4,10 @@ const bcrypt = require('bcrypt');
 const crypto = require('crypto');
 const QRCode = require('qrcode');
 
+// 화재 알림 상태 (in-memory, MVP용)
+let _fireAlertActive = false;
+let _fireAlertAt = null;
+
 const QR_HMAC_KEY = process.env.QR_HMAC_KEY || 'idnav_qr_hmac_key_change_in_production';
 const QR_BASE_URL = process.env.QR_BASE_URL || 'https://id-nav.databuilder.co.kr';
 
@@ -116,6 +120,26 @@ async function adminRoutes(fastify) {
         byFloor: anchorStats.rows
       }
     };
+  });
+
+  // ─── 화재 알림 API ───────────────────────────────────────────────
+  // GET /api/alert/status — 공개 (모바일 앱 폴링용)
+  fastify.get('/api/alert/status', async () => {
+    return { fireAlert: _fireAlertActive, fireAlertAt: _fireAlertAt };
+  });
+
+  // POST /api/admin/alert/fire — 화재 알림 발령 (관리자 전용)
+  fastify.post('/api/admin/alert/fire', { preHandler: requireAdmin }, async () => {
+    _fireAlertActive = true;
+    _fireAlertAt = new Date().toISOString();
+    return { ok: true, fireAlert: true, fireAlertAt: _fireAlertAt };
+  });
+
+  // DELETE /api/admin/alert/fire — 화재 알림 해제 (관리자 전용)
+  fastify.delete('/api/admin/alert/fire', { preHandler: requireAdmin }, async () => {
+    _fireAlertActive = false;
+    _fireAlertAt = null;
+    return { ok: true, fireAlert: false };
   });
 
   // GET /api/admin/sessions (목록)

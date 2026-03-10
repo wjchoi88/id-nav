@@ -89,12 +89,9 @@
   <!-- ===== 지도 영역 (입면도 + 평면도 동시 표시) ===== -->
   <div id="map-area">
 
-    <!-- 수직약도 (항상 표시) -->
+    <!-- 수직약도 (항상 표시) — canvas 기반 동적 렌더링 -->
     <div id="elev-panel">
-      <div class="map-container">
-        <img src="/images/elevation.svg" alt="수직약도" style="display:block;width:100%;height:auto;">
-        <svg id="overlay-elev" class="path-overlay" viewBox="0 0 600 400" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"></svg>
-      </div>
+      <canvas id="elev-canvas" aria-label="수직약도"></canvas>
     </div>
 
     <!-- 평면도 탭 바 -->
@@ -167,6 +164,17 @@
       <!-- destination-list alias — loadDestinations()가 채워줌 -->
       <div id="destination-list">
         <p style="padding:16px; color:#6c757d; font-size:13px;">목적지 로드 중…</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== 화재 알림 배너 (비상 대피) ===== -->
+  <div id="fire-alert-banner" style="display:none;" role="alert" aria-live="assertive">
+    <div class="fire-banner-inner">
+      <span class="fire-banner-icon">&#128293;</span>
+      <div class="fire-banner-text">
+        <strong id="fire-banner-title">화재 알림</strong>
+        <span id="fire-banner-desc">즉시 대피하세요. 엘리베이터 사용 금지.</span>
       </div>
     </div>
   </div>

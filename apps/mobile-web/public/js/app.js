@@ -596,55 +596,140 @@ function renderFloorMap(floor) {
   svg.innerHTML = defs + pathLayer + markerLayer;
 }
 
+// ─────────────────────────────────────────────
+// elev-canvas: 입면도 동적 렌더링
+// ─────────────────────────────────────────────
+
+// 층 배치 (위→아래: B4, B3, B2, B1 — 지하 번호 역방향)
+const ELEV_FLOORS = ['B4', 'B3', 'B2', 'B1'];
+const ELEV_COLORS = {
+  active:   '#007AFF',  // 현재 층
+  onPath:   '#FFD400',  // 경로 통과 층
+  normal:   '#F0F0F5',  // 일반 층
+  border:   '#C7C7CC',
+  text:     '#1C1C1E',
+  textSub:  '#636366',
+};
+
 function renderElevation() {
-  const svg = document.getElementById('overlay-elev');
-  if (!svg) return;
-  svg.innerHTML = '';
+  const canvas = document.getElementById('elev-canvas');
+  if (!canvas) return;
 
-  // 경로 전체 (지나온 경로 + 앞으로 갈 경로)
-  const allPath = [...state.traveledPath, ...state.currentPath];
+  // 캔버스 크기: 패널 너비에 맞춤 (device pixel ratio 고려)
+  const panel = canvas.parentElement;
+  const dpr   = window.devicePixelRatio || 1;
+  const W     = panel.clientWidth || 320;
+  const H     = 110;
+  canvas.width  = W * dpr;
+  canvas.height = H * dpr;
+  canvas.style.width  = W + 'px';
+  canvas.style.height = H + 'px';
 
-  // 층간 이동 구간 선 표시
-  let prevAnchor = null;
-  allPath.forEach((anchor) => {
-    if (
-      prevAnchor &&
-      prevAnchor.floor !== anchor.floor &&
-      prevAnchor.elev_x != null && prevAnchor.elev_y != null &&
-      anchor.elev_x != null && anchor.elev_y != null
-    ) {
-      const midY = Math.round((prevAnchor.elev_y + anchor.elev_y) / 2);
-      const elevPts = [
-        `${prevAnchor.elev_x},${prevAnchor.elev_y}`,
-        `${prevAnchor.elev_x},${midY}`,
-        `${anchor.elev_x},${midY}`,
-        `${anchor.elev_x},${anchor.elev_y}`
-      ].join(' ');
-      svg.innerHTML += `<polyline points="${elevPts}" stroke="#fff" stroke-width="8" stroke-dasharray="8,5" fill="none"/>
-        <polyline points="${elevPts}" stroke="#FFD400" stroke-width="5" stroke-dasharray="8,5" fill="none"/>`;
-    }
-    prevAnchor = anchor;
-  });
+  const ctx = canvas.getContext('2d');
+  ctx.scale(dpr, dpr);
+  ctx.clearRect(0, 0, W, H);
 
-  // 현재 위치 마커
+  // 레이아웃 계산
+  const n       = ELEV_FLOORS.length;
+  const padX    = 12;
+  const boxW    = Math.floor((W - padX * 2 - (n - 1) * 8) / n);
+  const boxH    = 64;
+  const topY    = (H - boxH) / 2;
+  const connY   = topY + boxH / 2; // 연결선 Y 중심
+
+  // 현재 위치 층 판별
   const currentAnchor = state.traveledPath.length > 0
     ? state.traveledPath[state.traveledPath.length - 1]
     : (state.currentPath.length > 0 ? state.currentPath[0] : null);
+  const currentFloor = currentAnchor ? currentAnchor.floor : null;
 
-  if (currentAnchor && currentAnchor.elev_x != null && currentAnchor.elev_y != null) {
-    svg.innerHTML += `
-      <circle cx="${currentAnchor.elev_x}" cy="${currentAnchor.elev_y}" r="12"
-        fill="#007AFF" opacity="0.25">
-        <animate attributeName="r" values="10;16;10" dur="1.5s" repeatCount="indefinite"/>
-      </circle>
-      <circle cx="${currentAnchor.elev_x}" cy="${currentAnchor.elev_y}" r="7" fill="#007AFF" stroke="#fff" stroke-width="2"/>`;
+  // 경로에 포함된 층 목록
+  const pathFloors = new Set([
+    ...state.traveledPath.map(a => a.floor),
+    ...state.currentPath.map(a => a.floor),
+  ]);
+
+  // 목적지 층
+  const destFloor = state.destination ? state.destination.floor : null;
+
+  // 경로 상 층간 이동 연결선 계산 (각 층 박스 X 중심 배열)
+  const floorCenterX = {};
+  ELEV_FLOORS.forEach((fl, i) => {
+    floorCenterX[fl] = padX + i * (boxW + 8) + boxW / 2;
+  });
+
+  // 연결선 — 경로가 지나는 인접 층 사이를 가로선으로 연결
+  const pathArr = [...state.traveledPath, ...state.currentPath];
+  for (let i = 0; i < pathArr.length - 1; i++) {
+    const a = pathArr[i], b = pathArr[i + 1];
+    if (a.floor === b.floor) continue;
+    const ax = floorCenterX[a.floor], bx = floorCenterX[b.floor];
+    if (ax == null || bx == null) continue;
+
+    // 지나온 구간: 회색, 앞으로 갈 구간: 노랑
+    const isTravel = i < state.traveledPath.length - 1;
+    ctx.strokeStyle = isTravel ? '#8E8E93' : '#FFD400';
+    ctx.lineWidth   = 3;
+    ctx.setLineDash(isTravel ? [6, 4] : []);
+    ctx.beginPath();
+    ctx.moveTo(Math.min(ax, bx), connY);
+    ctx.lineTo(Math.max(ax, bx), connY);
+    ctx.stroke();
+    ctx.setLineDash([]);
   }
 
-  // 목적지 마커
-  const dest = state.destination;
-  if (dest && dest.elev_x != null && dest.elev_y != null) {
-    svg.innerHTML += `<text x="${dest.elev_x}" y="${dest.elev_y - 10}" text-anchor="middle" font-size="16" aria-hidden="true">&#11088;</text>`;
-  }
+  // 층 박스 그리기
+  ELEV_FLOORS.forEach((fl, i) => {
+    const x = padX + i * (boxW + 8);
+    const isCurrent = fl === currentFloor;
+    const isOnPath  = pathFloors.has(fl);
+    const isDest    = fl === destFloor;
+
+    // 박스 배경
+    ctx.fillStyle = isCurrent ? ELEV_COLORS.active
+      : isDest ? '#34C759'
+      : isOnPath ? '#FFF3B0'
+      : ELEV_COLORS.normal;
+    ctx.strokeStyle = isCurrent ? ELEV_COLORS.active
+      : isDest ? '#34C759'
+      : isOnPath ? '#FFD400'
+      : ELEV_COLORS.border;
+    ctx.lineWidth = isCurrent || isDest ? 2.5 : 1.5;
+
+    roundRect(ctx, x, topY, boxW, boxH, 10);
+    ctx.fill();
+    ctx.stroke();
+
+    // 층 이름 텍스트
+    ctx.fillStyle = isCurrent || isDest ? '#fff' : ELEV_COLORS.text;
+    ctx.font = `bold ${Math.min(boxW * 0.32, 18)}px -apple-system, sans-serif`;
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText(fl, x + boxW / 2, topY + boxH * 0.38);
+
+    // 부가 아이콘/텍스트
+    ctx.font = `${Math.min(boxW * 0.22, 13)}px -apple-system, sans-serif`;
+    ctx.fillStyle = isCurrent ? 'rgba(255,255,255,0.85)'
+      : isDest ? 'rgba(255,255,255,0.85)'
+      : ELEV_COLORS.textSub;
+
+    const sub = isCurrent ? '현재' : isDest ? '목적지' : '';
+    if (sub) ctx.fillText(sub, x + boxW / 2, topY + boxH * 0.68);
+  });
+}
+
+function roundRect(ctx, x, y, w, h, r) {
+  ctx.beginPath();
+  ctx.moveTo(x + r, y);
+  ctx.lineTo(x + w - r, y);
+  ctx.quadraticCurveTo(x + w, y, x + w, y + r);
+  ctx.lineTo(x + w, y + h - r);
+  ctx.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
+  ctx.lineTo(x + r, y + h);
+  ctx.quadraticCurveTo(x, y + h, x, y + h - r);
+  ctx.lineTo(x, y + r);
+  ctx.quadraticCurveTo(x, y, x + r, y);
+  ctx.closePath();
 }
 
 // ─────────────────────────────────────────────
@@ -776,6 +861,60 @@ function getDirArrow(path) {
 }
 
 // ─────────────────────────────────────────────
+// 화재 알림 폴링
+// ─────────────────────────────────────────────
+
+const FIRE_ALERT_I18N = {
+  ko: { title: '화재 알림', desc: '즉시 대피하세요. 엘리베이터 사용 금지.' },
+  en: { title: 'Fire Alert', desc: 'Evacuate immediately. Do NOT use elevators.' },
+  ja: { title: '火災警報', desc: '直ちに避難してください。エレベーター使用禁止。' },
+  zh: { title: '火灾警报', desc: '请立即疏散。禁止使用电梯。' },
+};
+
+let _fireAlertActive = false;
+let _fireAlertTimer = null;
+
+function getFireI18n(key) {
+  const lang = (localStorage.getItem('idnav_lang') || navigator.language || 'ko').split('-')[0];
+  return (FIRE_ALERT_I18N[lang] || FIRE_ALERT_I18N['en'])[key];
+}
+
+function showFireAlertBanner() {
+  const banner = document.getElementById('fire-alert-banner');
+  if (!banner) return;
+  const titleEl = document.getElementById('fire-banner-title');
+  const descEl  = document.getElementById('fire-banner-desc');
+  if (titleEl) titleEl.textContent = getFireI18n('title');
+  if (descEl)  descEl.textContent  = getFireI18n('desc');
+  banner.style.display = 'flex';
+}
+
+function hideFireAlertBanner() {
+  const banner = document.getElementById('fire-alert-banner');
+  if (banner) banner.style.display = 'none';
+}
+
+async function pollFireAlert() {
+  try {
+    const res = await fetch(`${API}/api/alert/status`);
+    if (!res.ok) return;
+    const data = await res.json();
+    if (data.fireAlert && !_fireAlertActive) {
+      _fireAlertActive = true;
+      showFireAlertBanner();
+    } else if (!data.fireAlert && _fireAlertActive) {
+      _fireAlertActive = false;
+      hideFireAlertBanner();
+    }
+  } catch (_) {}
+}
+
+function startFireAlertPolling() {
+  pollFireAlert(); // 즉시 첫 체크
+  _fireAlertTimer = setInterval(pollFireAlert, 10000); // 10초마다
+}
+
+// ─────────────────────────────────────────────
 // 이벤트 바인딩 및 초기화
 // ─────────────────────────────────────────────
 
@@ -787,5 +926,7 @@ document.addEventListener('DOMContentLoaded', () => {
     toggle.addEventListener('change', e => toggleMobility(e.target.checked));
   }
   document.addEventListener('click', closeLangMenuOnOutsideClick);
+  window.addEventListener('resize', () => renderElevation());
+  startFireAlertPolling();
   init();
 });

@@ -74,6 +74,20 @@
       <a class="btn btn-secondary btn-sm" href="/admin/anchors.html">앵커 관리 →</a>
       <a class="btn btn-secondary btn-sm mt-8" href="/admin/sessions.html" style="margin-left:8px;">세션 통계 →</a>
     </div>
+
+    <!-- 화재 알림 패널 -->
+    <h2 class="section-title" style="margin-top:32px;">긴급 화재 알림</h2>
+    <div class="fire-alert-panel">
+      <div class="fire-alert-row">
+        <span class="fire-alert-label">현재 상태</span>
+        <span id="fire-alert-status" class="fire-alert-status fire-alert-normal">정상</span>
+      </div>
+      <div class="fire-alert-row fire-alert-actions">
+        <button id="fire-trigger-btn" class="btn btn-danger" onclick="triggerFireAlert()">화재 알림 발령</button>
+        <button id="fire-clear-btn"   class="btn btn-secondary" onclick="clearFireAlert()" disabled>알림 해제</button>
+      </div>
+      <p class="fire-alert-desc">발령 시 모든 모바일 사용자 화면에 대피 안내 배너가 즉시 표시됩니다.</p>
+    </div>
   </main>
 
   <script src="/admin/js/admin.js"></script>
@@ -83,6 +97,7 @@
       setActiveNav();
       try { await loadStats(); } catch (e) { console.warn('통계 로드 실패', e); }
       try { await loadAnchors(); } catch (e) { console.warn('앵커 로드 실패', e); }
+      try { await loadFireAlertStatus(); } catch (e) { console.warn('알림 상태 로드 실패', e); }
     })();
   </script>
 </body>

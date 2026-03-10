@@ -335,6 +335,67 @@ function setActiveNav() {
   });
 }
 
+// -----------------------------------------------------------------------------
+// triggerFireAlert — POST /api/admin/alert/fire → 화재 알림 발령
+// -----------------------------------------------------------------------------
+async function triggerFireAlert() {
+  const ok = confirm('화재 알림을 발령하시겠습니까?\n모든 모바일 사용자에게 대피 안내가 표시됩니다.');
+  if (!ok) return;
+
+  try {
+    const res = await apiFetch('/api/admin/alert/fire', { method: 'POST' });
+    if (!res.ok) throw new Error('발령 실패');
+    updateFireAlertUI(true);
+    alert('화재 알림이 발령되었습니다.');
+  } catch (e) {
+    alert('화재 알림 발령 실패: ' + e.message);
+  }
+}
+
+// -----------------------------------------------------------------------------
+// clearFireAlert — DELETE /api/admin/alert/fire → 화재 알림 해제
+// -----------------------------------------------------------------------------
+async function clearFireAlert() {
+  const ok = confirm('화재 알림을 해제하시겠습니까?');
+  if (!ok) return;
+
+  try {
+    const res = await apiFetch('/api/admin/alert/fire', { method: 'DELETE' });
+    if (!res.ok) throw new Error('해제 실패');
+    updateFireAlertUI(false);
+    alert('화재 알림이 해제되었습니다.');
+  } catch (e) {
+    alert('화재 알림 해제 실패: ' + e.message);
+  }
+}
+
+// -----------------------------------------------------------------------------
+// loadFireAlertStatus — 현재 화재 알림 상태 조회 및 UI 업데이트
+// -----------------------------------------------------------------------------
+async function loadFireAlertStatus() {
+  try {
+    const res = await fetch('/api/alert/status');
+    if (!res.ok) return;
+    const data = await res.json();
+    updateFireAlertUI(data.fireAlert, data.fireAlertAt);
+  } catch (_) {}
+}
+
+function updateFireAlertUI(active, alertAt) {
+  const statusEl = document.getElementById('fire-alert-status');
+  const triggerBtn = document.getElementById('fire-trigger-btn');
+  const clearBtn   = document.getElementById('fire-clear-btn');
+
+  if (statusEl) {
+    statusEl.textContent = active
+      ? (alertAt ? `발령 중 (${formatDatetime(alertAt)})` : '발령 중')
+      : '정상';
+    statusEl.className = 'fire-alert-status ' + (active ? 'fire-alert-active' : 'fire-alert-normal');
+  }
+  if (triggerBtn) triggerBtn.disabled = active;
+  if (clearBtn)   clearBtn.disabled   = !active;
+}
+
 // 전역 노출
 window.checkAuth       = checkAuth;
 window.logout          = logout;
@@ -350,4 +411,7 @@ window.apiFetch        = apiFetch;
 window.formatDuration  = formatDuration;
 window.formatDatetime  = formatDatetime;
 window.escHtml         = escHtml;
+window.triggerFireAlert    = triggerFireAlert;
+window.clearFireAlert      = clearFireAlert;
+window.loadFireAlertStatus = loadFireAlertStatus;
 window.setActiveNav    = setActiveNav;

@@ -909,3 +909,69 @@ body {
     overflow: hidden;
   }
 }
+
+/* =============================================================================
+   Fire Alert Banner
+   ============================================================================= */
+#fire-alert-banner {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 9999;
+  background: #dc2626;
+  color: #fff;
+  padding: 14px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: fire-banner-pulse 1.0s ease-in-out infinite;
+  box-shadow: 0 4px 16px rgba(220, 38, 38, 0.5);
+}
+
+.fire-banner-inner {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  max-width: 480px;
+  width: 100%;
+}
+
+.fire-banner-icon {
+  font-size: 28px;
+  flex-shrink: 0;
+}
+
+.fire-banner-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.fire-banner-text strong {
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.fire-banner-text span {
+  font-size: 13px;
+  opacity: 0.92;
+}
+
+@keyframes fire-banner-pulse {
+  0%, 100% { background: #dc2626; }
+  50%       { background: #b91c1c; }
+}
+
+/* =============================================================================
+   Elev Canvas
+   ============================================================================= */
+#elev-panel {
+  padding: 8px 0 0;
+}
+
+#elev-canvas {
+  display: block;
+  width: 100%;
+  border-radius: 10px;
+}
